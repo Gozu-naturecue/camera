@@ -52,13 +52,13 @@ class CameraViewController: UIViewController {
         let difference = 6
         let shutterButtonRadius = shutterLabelRadius - difference
         
-        shutterButton.frame = CGRect(x: difference, y: difference, width: shutterButtonRadius * 2, height: shutterButtonRadius * 2)
+        shutterButton.frame = CGRect(x: Int(shutterLabelPositionX) + difference, y: Int(shutterLabelPositionY) + difference, width: shutterButtonRadius * 2, height: shutterButtonRadius * 2)
         shutterButton.layer.masksToBounds = true
         
         shutterButton.backgroundColor = UIColor.white
         shutterButton.layer.cornerRadius = CGFloat(shutterButtonRadius)
         
-        shutterLabel.addSubview(shutterButton)
+        self.view.addSubview(shutterButton)
     }
 
 
