@@ -57,13 +57,11 @@ class CameraViewController: UIViewController {
         
         shutterButton.backgroundColor = UIColor.white
         shutterButton.layer.cornerRadius = CGFloat(shutterButtonRadius)
+        shutterButton.addTarget(self, action: #selector(CameraViewController.onClickShutterButton(sender:)), for: .touchUpInside)
         
         self.view.addSubview(shutterButton)
     }
 
-
-    
-    
     var captureSesssion: AVCaptureSession!
     var stillImageOutput: AVCapturePhotoOutput?
     var previewLayer: AVCaptureVideoPreviewLayer?
@@ -110,4 +108,7 @@ class CameraViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    internal func onClickShutterButton(sender: UIButton) {
+        print("onClickShutterButton:");
+    }
 }
