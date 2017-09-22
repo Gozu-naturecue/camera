@@ -15,6 +15,8 @@ class CameraViewController: UIViewController {
     private var shutterButton:UIButton!
     
     private var cameraView:UIView!
+    
+    private var blackView:UIView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,12 +61,16 @@ class CameraViewController: UIViewController {
         shutterButton.layer.cornerRadius = CGFloat(shutterButtonRadius)
         shutterButton.addTarget(self, action: #selector(CameraViewController.onDownShutterButton(sender:)), for: .touchDown)
         shutterButton.addTarget(self, action: #selector(CameraViewController.onUpShutterButton(sender:)), for: [.touchUpInside,.touchUpOutside])
-        shutterButton.addTarget(self, action: #selector(CameraViewController.onClickShutterButton(sender:)), for: .touchUpInside)
         
         self.view.addSubview(shutterButton)
+        
+        blackView = UIView()
+        blackView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
+        blackView.backgroundColor = UIColor.black
+        blackView.isHidden = true
+        self.view.addSubview(blackView)
     }
 
-    /*
     var captureSesssion: AVCaptureSession!
     var stillImageOutput: AVCapturePhotoOutput?
     var previewLayer: AVCaptureVideoPreviewLayer?
@@ -105,15 +111,10 @@ class CameraViewController: UIViewController {
         }
 
     }
-    */
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-
-    @objc internal func onClickShutterButton(sender: UIButton) {
-
     }
     
     @objc internal func onDownShutterButton(sender: UIButton) {
@@ -124,7 +125,7 @@ class CameraViewController: UIViewController {
 
             // 縮小用アフィン行列を作成する.
             self.shutterButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-
+            
         })
         { (Bool) -> Void in
             
@@ -133,16 +134,15 @@ class CameraViewController: UIViewController {
     
     @objc internal func onUpShutterButton(sender: UIButton) {
         UIView.animate(withDuration: 0.06,
-                       
         // アニメーション中の処理.
         animations: { () -> Void in
-                
+            
             // 拡大用アフィン行列を作成する.
             self.shutterButton.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-                
+            self.blackView.isHidden = false
+        }, completion: { _ in
+            self.blackView.isHidden = true
         })
-        { (Bool) -> Void in
-            
-        }
+
     }
 }
