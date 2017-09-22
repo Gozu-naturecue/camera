@@ -57,11 +57,14 @@ class CameraViewController: UIViewController {
         
         shutterButton.backgroundColor = UIColor.white
         shutterButton.layer.cornerRadius = CGFloat(shutterButtonRadius)
+        shutterButton.addTarget(self, action: #selector(CameraViewController.onDownShutterButton(sender:)), for: .touchDown)
+        shutterButton.addTarget(self, action: #selector(CameraViewController.onUpShutterButton(sender:)), for: [.touchUpInside,.touchUpOutside])
         shutterButton.addTarget(self, action: #selector(CameraViewController.onClickShutterButton(sender:)), for: .touchUpInside)
         
         self.view.addSubview(shutterButton)
     }
 
+    /*
     var captureSesssion: AVCaptureSession!
     var stillImageOutput: AVCapturePhotoOutput?
     var previewLayer: AVCaptureVideoPreviewLayer?
@@ -102,13 +105,44 @@ class CameraViewController: UIViewController {
         }
 
     }
+    */
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 
-    internal func onClickShutterButton(sender: UIButton) {
-        print("onClickShutterButton:");
+    @objc internal func onClickShutterButton(sender: UIButton) {
+
+    }
+    
+    @objc internal func onDownShutterButton(sender: UIButton) {
+        UIView.animate(withDuration: 0.06,
+                       
+        // アニメーション中の処理.
+        animations: { () -> Void in
+
+            // 縮小用アフィン行列を作成する.
+            self.shutterButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+
+        })
+        { (Bool) -> Void in
+            
+        }
+    }
+    
+    @objc internal func onUpShutterButton(sender: UIButton) {
+        UIView.animate(withDuration: 0.06,
+                       
+        // アニメーション中の処理.
+        animations: { () -> Void in
+                
+            // 拡大用アフィン行列を作成する.
+            self.shutterButton.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+                
+        })
+        { (Bool) -> Void in
+            
+        }
     }
 }
