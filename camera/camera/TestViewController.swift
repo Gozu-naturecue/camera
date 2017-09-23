@@ -11,26 +11,22 @@ import SnapKit
 
 class TestViewController: UIViewController {
 
+    let headerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .red
+        return view
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        self.view.backgroundColor = UIColor.black
+        
+        view.addSubview(headerView)
+        
+        headerView.snp.makeConstraints({ (make) in
+            make.width.equalToSuperview()
+            make.height.equalTo(50)
+            make.centerX.centerY.equalToSuperview()
+        })
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
