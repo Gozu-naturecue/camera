@@ -105,8 +105,8 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
     var output:AVCaptureVideoDataOutput!
     var session:AVCaptureSession!
     var camera:AVCaptureDevice!
-    var imageView:UIImageView!
     var previewLayer: AVCaptureVideoPreviewLayer?
+
     override func viewWillAppear(_ animated: Bool) {
         // カメラの設定
         setupCamera()
@@ -129,56 +129,74 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
     }
     
     func setupCamera(){
-        // AVCaptureSession: キャプチャに関する入力と出力の管理
-        session = AVCaptureSession()
-        
-        // sessionPreset: キャプチャ・クオリティの設定
-        session.sessionPreset = AVCaptureSession.Preset.photo
-        
-        // 背面・前面カメラの選択 iOS10での変更
-        camera = AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .back)
-        
-        // カメラからの入力データ
+        let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .back)
+        device?.activeVideoMinFrameDuration = CMTimeMake(1, 30)
+
         do {
-            input = try AVCaptureDeviceInput(device: camera) as AVCaptureDeviceInput
-        } catch let error as NSError {
+            input = try AVCaptureDeviceInput(device: device!)
+            session = AVCaptureSession()
+
+            if session.canSetSessionPreset(AVCaptureSession.Preset.photo) {
+                session.sessionPreset = AVCaptureSession.Preset.photo
+            }
+            
+            if session.canAddInput(input) {
+                session.addInput(input)
+            }
+
+            output = AVCaptureVideoDataOutput()
+            output.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String : Int(kCVPixelFormatType_32BGRA)]
+            output.setSampleBufferDelegate(self, queue: DispatchQueue.main)
+            output.alwaysDiscardsLateVideoFrames = true
+            
+            if session.canAddOutput(output){
+                session.addOutput(output)
+                session.startRunning()
+                
+                previewLayer = AVCaptureVideoPreviewLayer(session: session)
+                previewLayer?.videoGravity = AVLayerVideoGravity.resizeAspect
+                previewLayer?.connection?.videoOrientation = AVCaptureVideoOrientation.portrait
+                
+                previewLayer?.position = CGPoint(x: self.cameraView.frame.width/2, y: self.cameraView.frame.height/2)
+                previewLayer?.bounds = self.cameraView.frame
+                self.cameraView.layer.addSublayer(previewLayer!)
+            }
+        } catch {
             print(error)
         }
-        
-        // 入力をセッションに追加
-        if(session.canAddInput(input)) {
-            session.addInput(input)
-        }
-        
-        // AVCaptureVideoDataOutput :動画フレームデータを出力に設定
-        output = AVCaptureVideoDataOutput()
-        // 出力をセッションに追加
-        if(session.canAddOutput(output)) {
-            session.addOutput(output)
-            session.stopRunning()
-            
-            previewLayer = AVCaptureVideoPreviewLayer(session: session)
-            previewLayer?.videoGravity = AVLayerVideoGravity.resizeAspect // アスペクトフィット
-            previewLayer?.connection?.videoOrientation = AVCaptureVideoOrientation.portrait // カメラの向き
-            
-            self.cameraView.layer.addSublayer(previewLayer!)
-            
-            // ビューのサイズの調整
-            previewLayer?.position = CGPoint(x: self.cameraView.frame.width / 2, y: self.cameraView.frame.height / 2)
-            previewLayer?.bounds = self.cameraView.frame
-        }
-        
-        // ピクセルフォーマットを 32bit BGR + A とする
-        output.videoSettings = [kCVPixelBufferPixelFormatTypeKey as AnyHashable as! String : Int(kCVPixelFormatType_32BGRA)]
-        
-        // フレームをキャプチャするためのサブスレッド用のシリアルキューを用意
-        output.setSampleBufferDelegate(self, queue: DispatchQueue.main)
-        
-        output.alwaysDiscardsLateVideoFrames = true
-        
-        // ビデオ出力に接続
-        // let connection  = output.connection(withMediaType: AVMediaTypeVideo)
-        
-        session.startRunning()
     }
+
+    func captureOutput(captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, fromConnection connection: AVCaptureConnection!) {
+        print("captureOutput")
+//        let image = imageFromSampleBuffer(sampleBuffer: sampleBuffer)
+//        UIImageWriteToSavedPhotosAlbum(image, self, nil, nil)
+    }
+
+    func imageFromSampleBuffer(sampleBuffer :CMSampleBuffer) -> UIImage {
+        let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)!
+
+        // イメージバッファのロック
+        CVPixelBufferLockBaseAddress(imageBuffer, CVPixelBufferLockFlags(rawValue: 0))
+
+        // 画像情報を取得
+        let base = CVPixelBufferGetBaseAddressOfPlane(imageBuffer, 0)!
+        let bytesPerRow = UInt(CVPixelBufferGetBytesPerRow(imageBuffer))
+        let width = UInt(CVPixelBufferGetWidth(imageBuffer))
+        let height = UInt(CVPixelBufferGetHeight(imageBuffer))
+
+        // ビットマップコンテキスト作成
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        let bitsPerCompornent = 8
+        let bitmapInfo = CGBitmapInfo(rawValue: (CGBitmapInfo.byteOrder32Little.rawValue | CGImageAlphaInfo.premultipliedFirst.rawValue) as UInt32)
+        let newContext = CGContext(data: base, width: Int(width), height: Int(height), bitsPerComponent: Int(bitsPerCompornent), bytesPerRow: Int(bytesPerRow), space: colorSpace, bitmapInfo: bitmapInfo.rawValue)! as CGContext
+
+        // 画像作成
+        let imageRef = newContext.makeImage()!
+        let image = UIImage(cgImage: imageRef, scale: 1.0, orientation: UIImageOrientation.right)
+
+        // イメージバッファのアンロック
+        CVPixelBufferUnlockBaseAddress(imageBuffer, CVPixelBufferLockFlags(rawValue: 0))
+        return image
+    }
+
 }
