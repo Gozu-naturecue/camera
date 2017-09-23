@@ -13,7 +13,6 @@
 		1155223D1F681E5D003A5531 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1155223C1F681E5D003A5531 /* Assets.xcassets */; };
 		11B598121F7618D4000B6E45 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B598111F7618D4000B6E45 /* AVFoundation.framework */; };
 		11B598141F7618EE000B6E45 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B598131F7618EE000B6E45 /* AssetsLibrary.framework */; };
-		11B9DC1B1F767E9400ADE7C0 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B9DC1A1F767E9400ADE7C0 /* TestViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,7 +24,6 @@
 		11B598111F7618D4000B6E45 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		11B598131F7618EE000B6E45 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		11B9DC171F767E4C00ADE7C0 /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = "<group>"; };
-		11B9DC1A1F767E9400ADE7C0 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,7 +81,6 @@
 		11B9DC1F1F76819500ADE7C0 /* camera */ = {
 			isa = PBXGroup;
 			children = (
-				11B9DC1A1F767E9400ADE7C0 /* TestViewController.swift */,
 				113FFF281F73FDFF00DF6957 /* CameraViewController.swift */,
 			);
 			path = camera;
@@ -181,7 +178,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				115522361F681E5D003A5531 /* AppDelegate.swift in Sources */,
-				11B9DC1B1F767E9400ADE7C0 /* TestViewController.swift in Sources */,
 				113FFF291F73FDFF00DF6957 /* CameraViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
