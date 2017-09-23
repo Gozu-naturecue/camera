@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-class CameraViewController: UIViewController {
+class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
     
     private var shutterLabel:UILabel!
     private var shutterButton:UIButton!
@@ -17,7 +17,7 @@ class CameraViewController: UIViewController {
     private var cameraView:UIView!
     
     private var blackView:UIView!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -29,7 +29,7 @@ class CameraViewController: UIViewController {
         cameraView.frame = CGRect(x: 0, y: 50, width: self.view.frame.width, height: self.view.frame.width/3 * 4)
         cameraView.backgroundColor = UIColor.white
         self.view.addSubview(cameraView)
-
+        
         // シャッターの外郭
         shutterLabel = UILabel()
         
@@ -70,52 +70,6 @@ class CameraViewController: UIViewController {
         blackView.isHidden = true
         self.view.addSubview(blackView)
     }
-
-    var captureSesssion: AVCaptureSession!
-    var stillImageOutput: AVCapturePhotoOutput?
-    var previewLayer: AVCaptureVideoPreviewLayer?
-    override func viewWillAppear(_ animated: Bool) {
-        captureSesssion = AVCaptureSession()
-        stillImageOutput = AVCapturePhotoOutput()
-        
-        captureSesssion.sessionPreset = AVCaptureSession.Preset.photo // 解像度の設定
-        
-        let device =  AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .back)
-        
-        do {
-            let input = try AVCaptureDeviceInput(device: device!)
-            
-            // 入力
-            if (captureSesssion.canAddInput(input)) {
-                captureSesssion.addInput(input)
-                
-                // 出力
-                if (captureSesssion.canAddOutput(stillImageOutput!)) {
-                    captureSesssion.addOutput(stillImageOutput!)
-                    captureSesssion.startRunning() // カメラ起動
-                    
-                    previewLayer = AVCaptureVideoPreviewLayer(session: captureSesssion)
-                    previewLayer?.videoGravity = AVLayerVideoGravity.resizeAspect // アスペクトフィット
-                    previewLayer?.connection?.videoOrientation = AVCaptureVideoOrientation.portrait // カメラの向き
-                    
-                    self.cameraView.layer.addSublayer(previewLayer!)
-                    
-                    // ビューのサイズの調整
-                    previewLayer?.position = CGPoint(x: self.cameraView.frame.width / 2, y: self.cameraView.frame.height / 2)
-                    previewLayer?.bounds = self.cameraView.frame
-                }
-            }
-        }
-        catch {
-            print(error)
-        }
-
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
     @objc internal func onDownShutterButton(sender: UIButton) {
         UIView.animate(withDuration: 0.06,
@@ -125,7 +79,6 @@ class CameraViewController: UIViewController {
 
             // 縮小用アフィン行列を作成する.
             self.shutterButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-            
         })
         { (Bool) -> Void in
             
@@ -140,9 +93,113 @@ class CameraViewController: UIViewController {
             // 拡大用アフィン行列を作成する.
             self.shutterButton.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
             self.blackView.isHidden = false
+            self.willSave = true
         }, completion: { _ in
             self.blackView.isHidden = true
         })
-
     }
+    
+    
+    
+    var input:AVCaptureDeviceInput!
+    var output:AVCaptureVideoDataOutput!
+    var session:AVCaptureSession!
+    var camera:AVCaptureDevice!
+    var previewLayer: AVCaptureVideoPreviewLayer?
+    var willSave = false
+
+    override func viewWillAppear(_ animated: Bool) {
+        // カメラの設定
+        setupCamera()
+    }
+    
+    // メモリ解放
+    override func viewDidDisappear(_ animated: Bool) {
+        // camera stop メモリ解放
+        session.stopRunning()
+        
+        for output in session.outputs {
+            session.removeOutput(output)
+        }
+        
+        for input in session.inputs {
+            session.removeInput(input)
+        }
+        session = nil
+        camera = nil
+    }
+    
+    func setupCamera(){
+        let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .back)
+        device?.activeVideoMinFrameDuration = CMTimeMake(1, 30)
+
+        do {
+            input = try AVCaptureDeviceInput(device: device!)
+            session = AVCaptureSession()
+
+            if session.canSetSessionPreset(AVCaptureSession.Preset.photo) {
+                session.sessionPreset = AVCaptureSession.Preset.photo
+            }
+            
+            if session.canAddInput(input) {
+                session.addInput(input)
+            }
+
+            output = AVCaptureVideoDataOutput()
+            output?.videoSettings = [kCVPixelBufferPixelFormatTypeKey as AnyHashable as! String : Int(kCVPixelFormatType_32BGRA)]
+            output.setSampleBufferDelegate(self, queue: DispatchQueue.main)
+            output.alwaysDiscardsLateVideoFrames = true
+            
+            if session.canAddOutput(output){
+                session.addOutput(output)
+                session.startRunning()
+                
+                previewLayer = AVCaptureVideoPreviewLayer(session: session)
+                previewLayer?.videoGravity = AVLayerVideoGravity.resizeAspect
+                previewLayer?.connection?.videoOrientation = AVCaptureVideoOrientation.portrait
+                
+                previewLayer?.position = CGPoint(x: self.cameraView.frame.width/2, y: self.cameraView.frame.height/2)
+                previewLayer?.bounds = self.cameraView.frame
+                self.cameraView.layer.addSublayer(previewLayer!)
+            }
+        } catch {
+            print(error)
+        }
+    }
+
+    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        if self.willSave {
+            let image = imageFromSampleBuffer(sampleBuffer: sampleBuffer)
+            UIImageWriteToSavedPhotosAlbum(image, self, nil, nil)
+            self.willSave = false
+        }
+    }
+
+    func imageFromSampleBuffer(sampleBuffer :CMSampleBuffer) -> UIImage {
+        let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)!
+
+        // イメージバッファのロック
+        CVPixelBufferLockBaseAddress(imageBuffer, CVPixelBufferLockFlags(rawValue: 0))
+
+        // 画像情報を取得
+        let base = CVPixelBufferGetBaseAddressOfPlane(imageBuffer, 0)!
+        let bytesPerRow = UInt(CVPixelBufferGetBytesPerRow(imageBuffer))
+        let width = UInt(CVPixelBufferGetWidth(imageBuffer))
+        let height = UInt(CVPixelBufferGetHeight(imageBuffer))
+
+        // ビットマップコンテキスト作成
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        let bitsPerCompornent = 8
+        let bitmapInfo = CGBitmapInfo(rawValue: (CGBitmapInfo.byteOrder32Little.rawValue | CGImageAlphaInfo.premultipliedFirst.rawValue) as UInt32)
+        let newContext = CGContext(data: base, width: Int(width), height: Int(height), bitsPerComponent: Int(bitsPerCompornent), bytesPerRow: Int(bytesPerRow), space: colorSpace, bitmapInfo: bitmapInfo.rawValue)! as CGContext
+
+        // 画像作成
+        let imageRef = newContext.makeImage()!
+        let image = UIImage(cgImage: imageRef, scale: 1.0, orientation: UIImageOrientation.right)
+
+        // イメージバッファのアンロック
+        CVPixelBufferUnlockBaseAddress(imageBuffer, CVPixelBufferLockFlags(rawValue: 0))
+        return image
+    }
+
 }
