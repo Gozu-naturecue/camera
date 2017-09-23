@@ -63,6 +63,11 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
         button.layer.cornerRadius = CGFloat(24)
         return button
     }()
+    let changeCameraButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "change_camera"), for: .normal)
+        return button
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,6 +79,7 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
         view.addSubview(footerView)
         footerView.addSubview(shutterLabel)
         footerView.addSubview(shutterButton)
+        footerView.addSubview(changeCameraButton)
         
         view.addSubview(blackView)
         
@@ -111,11 +117,18 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
             make.width.height.equalTo(48)
             make.centerX.centerY.equalToSuperview()
         })
-        
+        changeCameraButton.snp.makeConstraints({ (make) in
+            make.width.height.equalTo(35)
+            make.centerY.equalToSuperview()
+            make.right.equalTo(-10)
+        })
         // シャッターボタンの動作
         shutterButton.addTarget(self, action: #selector(CameraViewController.onDownShutterButton(sender:)), for: .touchDown)
         shutterButton.addTarget(self, action: #selector(CameraViewController.onUpShutterButton(sender:)), for: [.touchUpInside,.touchUpOutside])
-        
+
+        // カメラ切り替えボタンの動作
+        changeCameraButton.addTarget(self, action: #selector(CameraViewController.onDownChangeCameraButton(sender:)), for: .touchDown)
+        changeCameraButton.addTarget(self, action: #selector(CameraViewController.onUpChangeCameraButton(sender:)), for: [.touchUpInside,.touchUpOutside])
         setupCamera()
     }
     
@@ -139,7 +152,15 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
             self.blackView.isHidden = true
         })
     }
+
+    @objc internal func onDownChangeCameraButton(sender: UIButton) {
+       
+    }
     
+    @objc internal func onUpChangeCameraButton(sender: UIButton) {
+        
+    }
+
     func setupCamera(){
         let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .back)
         device?.activeVideoMinFrameDuration = CMTimeMake(1, 30)
