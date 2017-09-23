@@ -10,6 +10,8 @@
 		113FFF291F73FDFF00DF6957 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113FFF281F73FDFF00DF6957 /* CameraViewController.swift */; };
 		115522361F681E5D003A5531 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115522351F681E5D003A5531 /* AppDelegate.swift */; };
 		1155223D1F681E5D003A5531 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1155223C1F681E5D003A5531 /* Assets.xcassets */; };
+		11B598121F7618D4000B6E45 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B598111F7618D4000B6E45 /* AVFoundation.framework */; };
+		11B598141F7618EE000B6E45 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B598131F7618EE000B6E45 /* AssetsLibrary.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -18,6 +20,8 @@
 		115522351F681E5D003A5531 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1155223C1F681E5D003A5531 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		115522411F681E5D003A5531 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		11B598111F7618D4000B6E45 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		11B598131F7618EE000B6E45 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -25,6 +29,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				11B598141F7618EE000B6E45 /* AssetsLibrary.framework in Frameworks */,
+				11B598121F7618D4000B6E45 /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -36,6 +42,7 @@
 			children = (
 				115522341F681E5D003A5531 /* camera */,
 				115522331F681E5D003A5531 /* Products */,
+				11B598101F7618D4000B6E45 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -56,6 +63,15 @@
 				115522411F681E5D003A5531 /* Info.plist */,
 			);
 			path = camera;
+			sourceTree = "<group>";
+		};
+		11B598101F7618D4000B6E45 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				11B598131F7618EE000B6E45 /* AssetsLibrary.framework */,
+				11B598111F7618D4000B6E45 /* AVFoundation.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

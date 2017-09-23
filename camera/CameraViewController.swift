@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate, UIGestureRecognizerDelegate {
+class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
     
     private var shutterLabel:UILabel!
     private var shutterButton:UIButton!
@@ -79,7 +79,6 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
 
             // 縮小用アフィン行列を作成する.
             self.shutterButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-                
         })
         { (Bool) -> Void in
             
@@ -94,6 +93,7 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
             // 拡大用アフィン行列を作成する.
             self.shutterButton.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
             self.blackView.isHidden = false
+            self.willSave = true
         }, completion: { _ in
             self.blackView.isHidden = true
         })
@@ -106,6 +106,7 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
     var session:AVCaptureSession!
     var camera:AVCaptureDevice!
     var previewLayer: AVCaptureVideoPreviewLayer?
+    var willSave = false
 
     override func viewWillAppear(_ animated: Bool) {
         // カメラの設定
@@ -145,7 +146,7 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
             }
 
             output = AVCaptureVideoDataOutput()
-            output.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String : Int(kCVPixelFormatType_32BGRA)]
+            output?.videoSettings = [kCVPixelBufferPixelFormatTypeKey as AnyHashable as! String : Int(kCVPixelFormatType_32BGRA)]
             output.setSampleBufferDelegate(self, queue: DispatchQueue.main)
             output.alwaysDiscardsLateVideoFrames = true
             
@@ -166,10 +167,12 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
         }
     }
 
-    func captureOutput(captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, fromConnection connection: AVCaptureConnection!) {
-        print("captureOutput")
-//        let image = imageFromSampleBuffer(sampleBuffer: sampleBuffer)
-//        UIImageWriteToSavedPhotosAlbum(image, self, nil, nil)
+    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        if self.willSave {
+            let image = imageFromSampleBuffer(sampleBuffer: sampleBuffer)
+            UIImageWriteToSavedPhotosAlbum(image, self, nil, nil)
+            self.willSave = false
+        }
     }
 
     func imageFromSampleBuffer(sampleBuffer :CMSampleBuffer) -> UIImage {
