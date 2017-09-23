@@ -8,9 +8,15 @@
 
 import UIKit
 import SnapKit
+import AVFoundation
 
-class TestViewController: UIViewController {
+class TestViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
 
+    var input:AVCaptureDeviceInput!
+    var output:AVCaptureVideoDataOutput!
+    var session:AVCaptureSession!
+    var camera:AVCaptureDevice!
+    
     let blackView: UIView = {
         let view = UIView()
         view.backgroundColor = .black
@@ -26,7 +32,9 @@ class TestViewController: UIViewController {
     
     let cameraView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = .red
+        // カメラからの入力表示用にサイズ指定
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.width/3 * 4)
         return view
     }()
 
@@ -103,20 +111,23 @@ class TestViewController: UIViewController {
         })
         shutterLabel.snp.makeConstraints({ (make) in
             make.width.height.equalTo(60)
-            make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview()
+            make.centerX.centerY.equalToSuperview()
         })
         shutterButton.snp.makeConstraints({ (make) in
             make.width.height.equalTo(48)
-            make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview()
+            make.centerX.centerY.equalToSuperview()
         })
         
         // シャッターボタンの動作
         shutterButton.addTarget(self, action: #selector(CameraViewController.onDownShutterButton(sender:)), for: .touchDown)
         shutterButton.addTarget(self, action: #selector(CameraViewController.onUpShutterButton(sender:)), for: [.touchUpInside,.touchUpOutside])
+        
+        setupCamera()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+    }
+    
     @objc internal func onDownShutterButton(sender: UIButton) {
         UIView.animate(withDuration: 0.06,
             animations: { () -> Void in
@@ -134,4 +145,44 @@ class TestViewController: UIViewController {
         })
     }
 
+    func setupCamera(){
+        let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .back)
+        device?.activeVideoMinFrameDuration = CMTimeMake(1, 30)
+        
+        do {
+            input = try AVCaptureDeviceInput(device: device!)
+            session = AVCaptureSession()
+            
+            if session.canSetSessionPreset(AVCaptureSession.Preset.photo) {
+                session.sessionPreset = AVCaptureSession.Preset.photo
+            }
+            
+            if session.canAddInput(input) {
+                session.addInput(input)
+            }
+            
+            output = AVCaptureVideoDataOutput()
+            output?.videoSettings = [kCVPixelBufferPixelFormatTypeKey as AnyHashable as! String : Int(kCVPixelFormatType_32BGRA)]
+            output.setSampleBufferDelegate(self, queue: DispatchQueue.main)
+            output.alwaysDiscardsLateVideoFrames = true
+            
+            if session.canAddOutput(output){
+                session.addOutput(output)
+                session.startRunning()
+                
+                let previewLayer: AVCaptureVideoPreviewLayer = {
+                    let layer = AVCaptureVideoPreviewLayer(session: session)
+                    layer.videoGravity = AVLayerVideoGravity.resizeAspect
+                    layer.connection?.videoOrientation = AVCaptureVideoOrientation.portrait
+                    layer.bounds = self.cameraView.frame
+                    let cameraView = self.cameraView
+                    layer.position = CGPoint(x: cameraView.frame.width/2, y: cameraView.frame.height/2)
+                    return layer
+                }()
+                self.cameraView.layer.addSublayer(previewLayer)
+            }
+        } catch {
+            print(error)
+        }
+    }
 }
