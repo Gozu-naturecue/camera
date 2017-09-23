@@ -8,28 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		113FFF291F73FDFF00DF6957 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113FFF281F73FDFF00DF6957 /* CameraViewController.swift */; };
+		1140F8B51F7698B0005E8F4C /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B9DC171F767E4C00ADE7C0 /* SnapKit.framework */; };
 		115522361F681E5D003A5531 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115522351F681E5D003A5531 /* AppDelegate.swift */; };
 		1155223D1F681E5D003A5531 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1155223C1F681E5D003A5531 /* Assets.xcassets */; };
 		11B598121F7618D4000B6E45 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B598111F7618D4000B6E45 /* AVFoundation.framework */; };
 		11B598141F7618EE000B6E45 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B598131F7618EE000B6E45 /* AssetsLibrary.framework */; };
-		11B9DC181F767E4C00ADE7C0 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B9DC171F767E4C00ADE7C0 /* SnapKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		11B9DC1B1F767E9400ADE7C0 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B9DC1A1F767E9400ADE7C0 /* TestViewController.swift */; };
-		11B9DC1D1F767F9000ADE7C0 /* SnapKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 11B9DC171F767E4C00ADE7C0 /* SnapKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		11B9DC1E1F767F9000ADE7C0 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				11B9DC1D1F767F9000ADE7C0 /* SnapKit.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		113FFF281F73FDFF00DF6957 /* CameraViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
@@ -48,7 +33,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				11B9DC181F767E4C00ADE7C0 /* SnapKit.framework in Frameworks */,
+				1140F8B51F7698B0005E8F4C /* SnapKit.framework in Frameworks */,
 				11B598141F7618EE000B6E45 /* AssetsLibrary.framework in Frameworks */,
 				11B598121F7618D4000B6E45 /* AVFoundation.framework in Frameworks */,
 			);
@@ -114,8 +99,7 @@
 				1155222E1F681E5D003A5531 /* Sources */,
 				1155222F1F681E5D003A5531 /* Frameworks */,
 				115522301F681E5D003A5531 /* Resources */,
-				11B9DC191F767E6900ADE7C0 /* ShellScript */,
-				11B9DC1E1F767F9000ADE7C0 /* Embed Frameworks */,
+				1140F8B61F76990A005E8F4C /* Carthage */,
 			);
 			buildRules = (
 			);
@@ -174,14 +158,15 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		11B9DC191F767E6900ADE7C0 /* ShellScript */ = {
+		1140F8B61F76990A005E8F4C /* Carthage */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/Snapkit.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/SnapKit.framework",
 			);
+			name = Carthage;
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
