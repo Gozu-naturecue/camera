@@ -25,6 +25,13 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
         view.isHidden = true
         return view
     }()
+    let shutterView: UIImageView = {
+        let view = UIImageView()
+        let image: UIImage = UIImage(named: "Donald.jpg")!
+        view.image = image
+        view.isHidden = true
+        return view
+    }()
     let headerView: UIView = {
         let view = UIView()
         view.backgroundColor = .black
@@ -81,10 +88,14 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
         footerView.addSubview(shutterLabel)
         footerView.addSubview(shutterButton)
         footerView.addSubview(changeCameraButton)
-        
+        view.addSubview(shutterView)
         view.addSubview(blackView)
         
         blackView.snp.makeConstraints({ (make) in
+            make.width.height.equalToSuperview()
+            make.top.left.equalTo(0)
+        })
+        shutterView.snp.makeConstraints({ (make) in
             make.width.height.equalToSuperview()
             make.top.left.equalTo(0)
         })
@@ -133,8 +144,7 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        setUpFrontCamera()
-//        setUpBackCamera()
+        setUpBackCamera()
     }
     
     @objc internal func onDownShutterButton(sender: UIButton) {
@@ -148,10 +158,10 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
         UIView.animate(withDuration: 0.06,
                        animations: { () -> Void in
                         self.shutterButton.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-                        self.blackView.isHidden = false
+                        self.shutterView.isHidden = false
         }, completion: { _ in
             self.willSave = true
-            self.blackView.isHidden = true
+            self.shutterView.isHidden = true
         })
     }
 
