@@ -193,8 +193,8 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
             session = AVCaptureSession()
             
             if session.canSetSessionPreset(AVCaptureSession.Preset.high) {
-                session.sessionPreset = AVCaptureSession.Preset.hd1920x1080
-            }
+                session.sessionPreset = AVCaptureSession.Preset.high
+            } 
             
             if session.canAddInput(input) {
                 session.addInput(input)
