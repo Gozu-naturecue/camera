@@ -10,12 +10,13 @@ import UIKit
 import SnapKit
 import AVFoundation
 
-class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
+class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate, AVAudioPlayerDelegate {
 
     var input:AVCaptureDeviceInput!
     var output:AVCaptureVideoDataOutput!
     var session:AVCaptureSession!
     var camera:AVCaptureDevice!
+    var audioPlayer : AVAudioPlayer!
     var willSave = false
     var currentPosition:String!
     
@@ -130,17 +131,19 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
         // カメラ切り替えボタンの動作
         changeCameraButton.addTarget(self, action: #selector(CameraViewController.onDownChangeCameraButton(sender:)), for: .touchDown)
         changeCameraButton.addTarget(self, action: #selector(CameraViewController.onUpChangeCameraButton(sender:)), for: [.touchUpInside,.touchUpOutside])
+        
+        // シャッター音のセット
+        setSound()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        setUpFrontCamera()
-//        setUpBackCamera()
+        setUpBackCamera()
     }
     
     @objc internal func onDownShutterButton(sender: UIButton) {
         UIView.animate(withDuration: 0.06,
                        animations: { () -> Void in
-                        self.shutterButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+                       self.shutterButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
         })
     }
     
@@ -149,6 +152,7 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
                        animations: { () -> Void in
                         self.shutterButton.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
                         self.blackView.isHidden = false
+                        self.playSound()
         }, completion: { _ in
             self.willSave = true
             self.blackView.isHidden = true
@@ -273,6 +277,34 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
         CVPixelBufferUnlockBaseAddress(imageBuffer, CVPixelBufferLockFlags(rawValue: 0))
         return image
     }
+
+    func setSound(){
+        //再生する音源のURLを生成.
+        let soundFilePath : String = Bundle.main.path(forResource: "馬の鳴き声", ofType: "mp3")!
+        let fileURL = URL(fileURLWithPath: soundFilePath)
+        //AVAudioPlayerのインスタンス化.
+        audioPlayer = try! AVAudioPlayer(contentsOf: fileURL)
+        //AVAudioPlayerのデリゲートをセット.
+        audioPlayer.delegate = self
+    }
+
+    func playSound() {
+        audioPlayer.currentTime = 0
+        audioPlayer.play()
+    }
     
+    //音楽再生が成功した時に呼ばれるメソッド.
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        if !flag { return }
+    }
+    
+    //デコード中にエラーが起きた時に呼ばれるメソッド.
+    func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
+        if let e = error {
+            print("Error")
+            print(e.localizedDescription)
+            return
+        }
+    }
 }
 
