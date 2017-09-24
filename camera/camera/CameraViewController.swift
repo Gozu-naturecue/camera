@@ -17,6 +17,7 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
     var session:AVCaptureSession!
     var camera:AVCaptureDevice!
     var willSave = false
+    var currentPosition:String!
     
     let blackView: UIView = {
         let view = UIView()
@@ -63,6 +64,11 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
         button.layer.cornerRadius = CGFloat(24)
         return button
     }()
+    let changeCameraButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "change_camera"), for: .normal)
+        return button
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,6 +80,7 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
         view.addSubview(footerView)
         footerView.addSubview(shutterLabel)
         footerView.addSubview(shutterButton)
+        footerView.addSubview(changeCameraButton)
         
         view.addSubview(blackView)
         
@@ -111,15 +118,23 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
             make.width.height.equalTo(48)
             make.centerX.centerY.equalToSuperview()
         })
-        
+        changeCameraButton.snp.makeConstraints({ (make) in
+            make.width.height.equalTo(35)
+            make.centerY.equalToSuperview()
+            make.right.equalTo(-10)
+        })
         // シャッターボタンの動作
         shutterButton.addTarget(self, action: #selector(CameraViewController.onDownShutterButton(sender:)), for: .touchDown)
         shutterButton.addTarget(self, action: #selector(CameraViewController.onUpShutterButton(sender:)), for: [.touchUpInside,.touchUpOutside])
-        
-        setupCamera()
+
+        // カメラ切り替えボタンの動作
+        changeCameraButton.addTarget(self, action: #selector(CameraViewController.onDownChangeCameraButton(sender:)), for: .touchDown)
+        changeCameraButton.addTarget(self, action: #selector(CameraViewController.onUpChangeCameraButton(sender:)), for: [.touchUpInside,.touchUpOutside])
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        setUpFrontCamera()
+//        setUpBackCamera()
     }
     
     @objc internal func onDownShutterButton(sender: UIButton) {
@@ -139,21 +154,49 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
             self.blackView.isHidden = true
         })
     }
+
+    @objc internal func onDownChangeCameraButton(sender: UIButton) {
+        changeCamera()
+    }
     
-    func setupCamera(){
-        let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .back)
-        device?.activeVideoMinFrameDuration = CMTimeMake(1, 30)
+    @objc internal func onUpChangeCameraButton(sender: UIButton) {
+        
+    }
+    
+    func changeCamera() {
+        if self.currentPosition == "front" {
+            setUpBackCamera()
+        } else if self.currentPosition == "back" {
+            setUpFrontCamera()
+        }
+    }
+
+    enum CameraPosition {
+        case front
+        case back
+        
+        func setDevice() -> AVCaptureDevice {
+            switch self {
+            case .front:
+                return AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .front)!
+            case .back:
+                return AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .back)!
+            }
+        }
+    }
+    
+    func setupCamera(device: AVCaptureDevice){
+        device.activeVideoMinFrameDuration = CMTimeMake(1, 30)
         
         do {
-            input = try AVCaptureDeviceInput(device: device!)
+            input = try AVCaptureDeviceInput(device: device)
             session = AVCaptureSession()
-            
-            if session.canSetSessionPreset(AVCaptureSession.Preset.high) {
-                session.sessionPreset = AVCaptureSession.Preset.hd1920x1080
-            }
             
             if session.canAddInput(input) {
                 session.addInput(input)
+            }
+            if session.canSetSessionPreset(AVCaptureSession.Preset.hd4K3840x2160) {
+                session.sessionPreset = AVCaptureSession.Preset.hd4K3840x2160
             }
             
             output = AVCaptureVideoDataOutput()
@@ -179,6 +222,20 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
         } catch {
             print(error)
         }
+    }
+    
+    func setUpBackCamera(){
+        let position = CameraPosition.back
+        let device = position.setDevice()
+        setupCamera(device: device)
+        self.currentPosition = "back"
+    }
+
+    func setUpFrontCamera(){
+        let position = CameraPosition.front
+        let device = position.setDevice()
+        setupCamera(device: device)
+        self.currentPosition = "front"
     }
     
     // 1/30秒ごとに呼ばれるデリゲート(キャプチャごと)
