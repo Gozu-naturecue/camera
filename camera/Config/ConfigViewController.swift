@@ -8,13 +8,17 @@
 
 import UIKit
 import SnapKit
+import AVFoundation
 
-class ConfigViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    // Tableで使用する配列を定義する.
-    private let shutterSoundItems: NSArray = ["iOS9","iOS8", "iOS7", "iOS6", "iOS5", "iOS4"]
+class ConfigViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVAudioPlayerDelegate {
+    let userDefaults = UserDefaults.standard
+    var currentConfiguration: [String] = []
+    var audioPlayer : AVAudioPlayer!
     
+    // Tableで使用する配列を定義する.
+    private let shutterSoundItems: [String] = ["デフォルト","一眼カメラのシャッター音", "小型カメラのシャッター音", "連射音", "馬の鳴き声"]
     // Sectionで使用する配列を定義する.
-    private let sections: NSArray = ["シャッター音"]
+    private let sections: [String] = ["シャッター音"]
     
     let headerView: UIView = {
         let view = UIView()
@@ -83,10 +87,33 @@ class ConfigViewController: UIViewController, UITableViewDelegate, UITableViewDa
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.dataSource = self
         tableView.delegate = self
+        
+        setCurrentConfiguration()
     }
     
     @objc internal func onHomeButton(sender: UIButton) {
         navigationController?.popViewController(animated: true)
+    }
+    
+    func setCurrentConfiguration(){
+        for section in sections {
+            if ((userDefaults.string(forKey: section)) == nil) {
+                userDefaults.set("デフォルト", forKey: section)
+            }
+            currentConfiguration.append(userDefaults.string(forKey: section )!)
+        }
+    }
+    
+    func playSound(soundName: String){
+        //再生する音源のURLを生成.
+        let soundFilePath : String = Bundle.main.path(forResource: soundName, ofType: "mp3")!
+        let fileURL = URL(fileURLWithPath: soundFilePath)
+        //AVAudioPlayerのインスタンス化.
+        audioPlayer = try! AVAudioPlayer(contentsOf: fileURL)
+        //AVAudioPlayerのデリゲートをセット.
+        audioPlayer.delegate = self
+        audioPlayer.currentTime = 0
+        audioPlayer.play()
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -98,7 +125,7 @@ class ConfigViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let label : UILabel = UILabel()
         label.backgroundColor = .black
         label.textColor = #colorLiteral(red: 0.337254902, green: 0.3333333333, blue: 0.3529411765, alpha: 1)
-        label.text = sections[section] as? String
+        label.text = sections[section]
         return label
     }
     
@@ -111,8 +138,15 @@ class ConfigViewController: UIViewController, UITableViewDelegate, UITableViewDa
         cell?.textLabel?.textColor = #colorLiteral(red: 0.9529411765, green: 0.568627451, blue: 0.1921568627, alpha: 1)
         
         // 処理
+        // シャッター音
         if indexPath.section == 0 {
-            print("Value: \(shutterSoundItems[indexPath.row])")
+            let soundName = String(shutterSoundItems[indexPath.row])
+            userDefaults.set( soundName, forKey: sections[indexPath.section])
+            if soundName == "デフォルト" {
+                AudioServicesPlaySystemSound(1108);
+            } else {
+                playSound(soundName: soundName)
+            }
         }
     }
     
@@ -140,10 +174,12 @@ class ConfigViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         if indexPath.section == 0 {
             cell.textLabel?.text = "\(shutterSoundItems[indexPath.row])"
+            if userDefaults.string(forKey: sections[indexPath.section]) == shutterSoundItems[indexPath.row] {
+                cell.textLabel?.textColor = #colorLiteral(red: 0.9529411765, green: 0.568627451, blue: 0.1921568627, alpha: 1)
+                tableView.selectRow(at: indexPath, animated: true, scrollPosition: UITableViewScrollPosition(rawValue: indexPath.section)!)
+            }
         }
         
         return cell
     }
 }
-
-
