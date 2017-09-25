@@ -10,21 +10,15 @@ import UIKit
 import SnapKit
 import AVFoundation
 
-class ConfigViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVAudioPlayerDelegate {
-    let userDefaults = UserDefaults.standard
+class ConfigViewController: SuperViewController, UITableViewDelegate, UITableViewDataSource {
     var currentConfiguration: [String] = []
-    var audioPlayer : AVAudioPlayer!
     
     // Tableで使用する配列を定義する.
     private let shutterSoundItems: [String] = ["デフォルト","一眼カメラのシャッター音", "小型カメラのシャッター音", "連射音", "馬の鳴き声"]
     // Sectionで使用する配列を定義する.
     private let sections: [String] = ["シャッター音"]
     
-    let headerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .black
-        return view
-    }()
+
     let homeButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "camera"), for: .normal)
@@ -53,7 +47,6 @@ class ConfigViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .black
         
         view.addSubview(headerView)
             headerView.addSubview(titleLabel)

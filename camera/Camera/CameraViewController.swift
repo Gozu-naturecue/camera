@@ -10,26 +10,19 @@ import UIKit
 import SnapKit
 import AVFoundation
 
-class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate, AVAudioPlayerDelegate {
+class CameraViewController: SuperViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
 
     var input:AVCaptureDeviceInput!
     var output:AVCaptureVideoDataOutput!
     var session:AVCaptureSession!
     var camera:AVCaptureDevice!
-    var audioPlayer : AVAudioPlayer!
-    var willSave = false
     var currentPosition:String!
-    let userDefaults = UserDefaults.standard
+    var willSave = false
     
     let blackView: UIView = {
         let view = UIView()
         view.backgroundColor = .black
         view.isHidden = true
-        return view
-    }()
-    let headerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .black
         return view
     }()
     let configButton: UIButton = {
@@ -79,7 +72,6 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor.black
         
         view.addSubview(cameraView)
         view.addSubview(headerView)
