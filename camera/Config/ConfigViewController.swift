@@ -10,21 +10,15 @@ import UIKit
 import SnapKit
 import AVFoundation
 
-class ConfigViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVAudioPlayerDelegate {
-    let userDefaults = UserDefaults.standard
+class ConfigViewController: SuperViewController, UITableViewDelegate, UITableViewDataSource {
     var currentConfiguration: [String] = []
-    var audioPlayer : AVAudioPlayer!
     
     // Tableで使用する配列を定義する.
     private let shutterSoundItems: [String] = ["デフォルト","一眼カメラのシャッター音", "小型カメラのシャッター音", "連射音", "馬の鳴き声"]
     // Sectionで使用する配列を定義する.
     private let sections: [String] = ["シャッター音"]
     
-    let headerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .black
-        return view
-    }()
+
     let homeButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "camera"), for: .normal)
@@ -53,7 +47,6 @@ class ConfigViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .black
         
         view.addSubview(headerView)
             headerView.addSubview(titleLabel)
@@ -104,18 +97,6 @@ class ConfigViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
     
-    func playSound(soundName: String){
-        //再生する音源のURLを生成.
-        let soundFilePath : String = Bundle.main.path(forResource: soundName, ofType: "mp3")!
-        let fileURL = URL(fileURLWithPath: soundFilePath)
-        //AVAudioPlayerのインスタンス化.
-        audioPlayer = try! AVAudioPlayer(contentsOf: fileURL)
-        //AVAudioPlayerのデリゲートをセット.
-        audioPlayer.delegate = self
-        audioPlayer.currentTime = 0
-        audioPlayer.play()
-    }
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
     }
@@ -140,13 +121,9 @@ class ConfigViewController: UIViewController, UITableViewDelegate, UITableViewDa
         // 処理
         // シャッター音
         if indexPath.section == 0 {
-            let soundName = String(shutterSoundItems[indexPath.row])
-            userDefaults.set( soundName, forKey: sections[indexPath.section])
-            if soundName == "デフォルト" {
-                AudioServicesPlaySystemSound(1108)
-            } else {
-                playSound(soundName: soundName)
-            }
+            self.soundName = String(shutterSoundItems[indexPath.row])
+            userDefaults.set( self.soundName, forKey: sections[indexPath.section])
+            playSound(soundName: self.soundName)
         }
     }
     
