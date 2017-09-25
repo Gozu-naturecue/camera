@@ -143,7 +143,7 @@ class ConfigViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let soundName = String(shutterSoundItems[indexPath.row])
             userDefaults.set( soundName, forKey: sections[indexPath.section])
             if soundName == "デフォルト" {
-                AudioServicesPlaySystemSound(1108);
+                AudioServicesPlaySystemSound(1108)
             } else {
                 playSound(soundName: soundName)
             }
