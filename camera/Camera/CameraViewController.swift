@@ -174,6 +174,9 @@ class CameraViewController: SuperViewController, AVCaptureVideoDataOutputSampleB
         self.navigationController?.pushViewController(configViewController, animated: true)
     }
     
+    /*
+     * カメラのセッティング
+     */
     func changeCamera() {
         if self.currentPosition == "front" {
             setUpBackCamera()

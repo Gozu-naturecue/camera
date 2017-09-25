@@ -29,7 +29,7 @@ class SuperViewController: UIViewController, AVAudioPlayerDelegate {
     }
     
     /*
-     音源再生
+     * 音源再生
      */
     func playSound(soundName: String) {
         if soundName == "デフォルト" {
@@ -61,6 +61,10 @@ class SuperViewController: UIViewController, AVAudioPlayerDelegate {
         }
     }
 
+    /*
+     * ユーザーデフォルト
+     */
+    // デフォルト値のセット
     func setDefault(key: String, value: String){
         if ((userDefaults.string(forKey: key)) == nil) {
             userDefaults.set(value, forKey: key)
