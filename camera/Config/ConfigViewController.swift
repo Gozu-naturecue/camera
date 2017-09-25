@@ -8,10 +8,12 @@
 
 import UIKit
 import SnapKit
+import AVFoundation
 
-class ConfigViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ConfigViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVAudioPlayerDelegate {
     let userDefaults = UserDefaults.standard
     var currentConfiguration: [String] = []
+    var audioPlayer : AVAudioPlayer!
     
     // Tableで使用する配列を定義する.
     private let shutterSoundItems: [String] = ["デフォルト","一眼カメラのシャッター音", "小型カメラのシャッター音", "連射音", "馬の鳴き声"]
@@ -93,10 +95,6 @@ class ConfigViewController: UIViewController, UITableViewDelegate, UITableViewDa
         navigationController?.popViewController(animated: true)
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return sections.count
-    }
-    
     func setCurrentConfiguration(){
         for section in sections {
             if ((userDefaults.string(forKey: section)) == nil) {
@@ -104,6 +102,22 @@ class ConfigViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
             currentConfiguration.append(userDefaults.string(forKey: section )!)
         }
+    }
+    
+    func playSound(soundName: String){
+        //再生する音源のURLを生成.
+        let soundFilePath : String = Bundle.main.path(forResource: soundName, ofType: "mp3")!
+        let fileURL = URL(fileURLWithPath: soundFilePath)
+        //AVAudioPlayerのインスタンス化.
+        audioPlayer = try! AVAudioPlayer(contentsOf: fileURL)
+        //AVAudioPlayerのデリゲートをセット.
+        audioPlayer.delegate = self
+        audioPlayer.currentTime = 0
+        audioPlayer.play()
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return sections.count
     }
     
     // セクションのタイトル
@@ -124,8 +138,15 @@ class ConfigViewController: UIViewController, UITableViewDelegate, UITableViewDa
         cell?.textLabel?.textColor = #colorLiteral(red: 0.9529411765, green: 0.568627451, blue: 0.1921568627, alpha: 1)
         
         // 処理
+        // シャッター音
         if indexPath.section == 0 {
-            userDefaults.set( shutterSoundItems[indexPath.row], forKey: sections[indexPath.section])
+            let soundName = String(shutterSoundItems[indexPath.row])
+            userDefaults.set( soundName, forKey: sections[indexPath.section])
+            if soundName == "デフォルト" {
+                AudioServicesPlaySystemSound(1108);
+            } else {
+                playSound(soundName: soundName)
+            }
         }
     }
     
@@ -162,5 +183,3 @@ class ConfigViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return cell
     }
 }
-
-
