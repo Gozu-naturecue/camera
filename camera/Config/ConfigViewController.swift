@@ -28,7 +28,7 @@ class ConfigViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }()
     let borderUnderHeader: CALayer = {
         let layer = CALayer()
-        layer.frame = CGRect(x: 0, y: 50, width: UIScreen.main.bounds.size.width, height: 1.0)
+        layer.frame = CGRect(x: 0, y: 49, width: UIScreen.main.bounds.size.width, height: 1.0)
         layer.backgroundColor = #colorLiteral(red: 0.1607843137, green: 0.1607843137, blue: 0.1607843137, alpha: 1)
         return layer
     }()
@@ -52,9 +52,9 @@ class ConfigViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.view.backgroundColor = .black
         
         view.addSubview(headerView)
-//            headerView.layer.addSublayer(borderUnderHeader)
             headerView.addSubview(titleLabel)
             headerView.addSubview(homeButton)
+            headerView.layer.addSublayer(borderUnderHeader)
         view.addSubview(tableView)
         
         headerView.snp.makeConstraints({ (make) in
