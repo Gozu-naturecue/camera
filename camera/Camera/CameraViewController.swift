@@ -142,7 +142,7 @@ class CameraViewController: SuperViewController, AVCaptureVideoDataOutputSampleB
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        setSound()
+        self.soundName = userDefaults.string(forKey: "シャッター音")!
     }
     
     @objc internal func onDownShutterButton(sender: UIButton) {
@@ -157,7 +157,7 @@ class CameraViewController: SuperViewController, AVCaptureVideoDataOutputSampleB
                        animations: { () -> Void in
                         self.shutterButton.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
                         self.blackView.isHidden = false
-                        self.playSound()
+                        self.playSound(soundName: self.soundName)
         }, completion: { _ in
             self.willSave = true
             self.blackView.isHidden = true
@@ -283,43 +283,6 @@ class CameraViewController: SuperViewController, AVCaptureVideoDataOutputSampleB
         // イメージバッファのアンロック
         CVPixelBufferUnlockBaseAddress(imageBuffer, CVPixelBufferLockFlags(rawValue: 0))
         return image
-    }
-
-    func setSound(){
-        let soundName = userDefaults.string(forKey: "シャッター音")
-        if soundName == "デフォルト" {
-            return
-        }
-        //再生する音源のURLを生成.
-        let soundFilePath : String = Bundle.main.path(forResource: soundName, ofType: "mp3")!
-        let fileURL = URL(fileURLWithPath: soundFilePath)
-        //AVAudioPlayerのインスタンス化.
-        audioPlayer = try! AVAudioPlayer(contentsOf: fileURL)
-        //AVAudioPlayerのデリゲートをセット.
-        audioPlayer.delegate = self
-    }
-
-    func playSound() {
-        if userDefaults.string(forKey: "シャッター音") == "デフォルト" {
-            AudioServicesPlaySystemSound(1108)
-        } else {
-            audioPlayer.currentTime = 0
-            audioPlayer.play()
-        }
-    }
-    
-    //音楽再生が成功した時に呼ばれるメソッド.
-    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        if !flag { return }
-    }
-    
-    //デコード中にエラーが起きた時に呼ばれるメソッド.
-    func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
-        if let e = error {
-            print("Error")
-            print(e.localizedDescription)
-            return
-        }
     }
 }
 

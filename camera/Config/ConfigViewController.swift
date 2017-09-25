@@ -97,18 +97,6 @@ class ConfigViewController: SuperViewController, UITableViewDelegate, UITableVie
         }
     }
     
-    func playSound(soundName: String){
-        //再生する音源のURLを生成.
-        let soundFilePath : String = Bundle.main.path(forResource: soundName, ofType: "mp3")!
-        let fileURL = URL(fileURLWithPath: soundFilePath)
-        //AVAudioPlayerのインスタンス化.
-        audioPlayer = try! AVAudioPlayer(contentsOf: fileURL)
-        //AVAudioPlayerのデリゲートをセット.
-        audioPlayer.delegate = self
-        audioPlayer.currentTime = 0
-        audioPlayer.play()
-    }
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
     }
@@ -133,13 +121,9 @@ class ConfigViewController: SuperViewController, UITableViewDelegate, UITableVie
         // 処理
         // シャッター音
         if indexPath.section == 0 {
-            let soundName = String(shutterSoundItems[indexPath.row])
-            userDefaults.set( soundName, forKey: sections[indexPath.section])
-            if soundName == "デフォルト" {
-                AudioServicesPlaySystemSound(1108)
-            } else {
-                playSound(soundName: soundName)
-            }
+            self.soundName = String(shutterSoundItems[indexPath.row])
+            userDefaults.set( self.soundName, forKey: sections[indexPath.section])
+            playSound(soundName: self.soundName)
         }
     }
     
