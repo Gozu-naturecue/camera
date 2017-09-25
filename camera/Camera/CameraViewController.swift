@@ -25,6 +25,13 @@ class CameraViewController: SuperViewController, AVCaptureVideoDataOutputSampleB
         view.isHidden = true
         return view
     }()
+    let shutterView: UIImageView = {
+        let view = UIImageView()
+        let image: UIImage = UIImage(named: "Donald.jpg")!
+        view.image = image
+        view.isHidden = true
+        return view
+    }()
     let configButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "config"), for: .normal)
@@ -82,9 +89,14 @@ class CameraViewController: SuperViewController, AVCaptureVideoDataOutputSampleB
             footerView.addSubview(shutterButton)
             footerView.addSubview(changeCameraButton)
         
+        view.addSubview(shutterView)
         view.addSubview(blackView)
         
         blackView.snp.makeConstraints({ (make) in
+            make.width.height.equalToSuperview()
+            make.top.left.equalTo(0)
+        })
+        shutterView.snp.makeConstraints({ (make) in
             make.width.height.equalToSuperview()
             make.top.left.equalTo(0)
         })
@@ -153,14 +165,14 @@ class CameraViewController: SuperViewController, AVCaptureVideoDataOutputSampleB
     }
     
     @objc internal func onUpShutterButton(sender: UIButton) {
-        UIView.animate(withDuration: 0.06,
+        UIView.animate(withDuration: 0.10,
                        animations: { () -> Void in
                         self.shutterButton.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-                        self.blackView.isHidden = false
+                        self.shutterView.isHidden = false
                         self.playSound(soundName: self.soundName)
         }, completion: { _ in
             self.willSave = true
-            self.blackView.isHidden = true
+            self.shutterView.isHidden = true
         })
     }
 
