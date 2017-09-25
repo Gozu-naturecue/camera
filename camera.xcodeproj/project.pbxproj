@@ -11,6 +11,12 @@
 		1140F8B51F7698B0005E8F4C /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B9DC171F767E4C00ADE7C0 /* SnapKit.framework */; };
 		115522361F681E5D003A5531 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115522351F681E5D003A5531 /* AppDelegate.swift */; };
 		1155223D1F681E5D003A5531 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1155223C1F681E5D003A5531 /* Assets.xcassets */; };
+		11775ED61F78076300371565 /* 馬の鳴き声.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 11775ED51F78065900371565 /* 馬の鳴き声.mp3 */; };
+		11A46BEA1F792A840089D492 /* 一眼カメラのシャッター音.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 11A46BE81F792A790089D492 /* 一眼カメラのシャッター音.mp3 */; };
+		11A46BEB1F792A860089D492 /* 小型カメラのシャッター音.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 11A46BE91F792A790089D492 /* 小型カメラのシャッター音.mp3 */; };
+		11A46BEC1F792A8A0089D492 /* 連射音.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 11A46BE71F792A790089D492 /* 連射音.mp3 */; };
+		11A46BF01F7957570089D492 /* SuperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A46BEF1F7957570089D492 /* SuperViewController.swift */; };
+		11B582F81F78ADA6008B3BF6 /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B582F71F78ADA6008B3BF6 /* ConfigViewController.swift */; };
 		11B598121F7618D4000B6E45 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B598111F7618D4000B6E45 /* AVFoundation.framework */; };
 		11B598141F7618EE000B6E45 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B598131F7618EE000B6E45 /* AssetsLibrary.framework */; };
 /* End PBXBuildFile section */
@@ -21,6 +27,12 @@
 		115522351F681E5D003A5531 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1155223C1F681E5D003A5531 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		115522411F681E5D003A5531 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		11775ED51F78065900371565 /* 馬の鳴き声.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "馬の鳴き声.mp3"; sourceTree = "<group>"; };
+		11A46BE71F792A790089D492 /* 連射音.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "連射音.mp3"; sourceTree = "<group>"; };
+		11A46BE81F792A790089D492 /* 一眼カメラのシャッター音.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "一眼カメラのシャッター音.mp3"; sourceTree = "<group>"; };
+		11A46BE91F792A790089D492 /* 小型カメラのシャッター音.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "小型カメラのシャッター音.mp3"; sourceTree = "<group>"; };
+		11A46BEF1F7957570089D492 /* SuperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperViewController.swift; sourceTree = "<group>"; };
+		11B582F71F78ADA6008B3BF6 /* ConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
 		11B598111F7618D4000B6E45 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		11B598131F7618EE000B6E45 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		11B9DC171F767E4C00ADE7C0 /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = "<group>"; };
@@ -60,12 +72,50 @@
 		115522341F681E5D003A5531 /* camera */ = {
 			isa = PBXGroup;
 			children = (
-				11B9DC1F1F76819500ADE7C0 /* camera */,
-				115522351F681E5D003A5531 /* AppDelegate.swift */,
-				1155223C1F681E5D003A5531 /* Assets.xcassets */,
 				115522411F681E5D003A5531 /* Info.plist */,
+				115522351F681E5D003A5531 /* AppDelegate.swift */,
+				11B9DC1F1F76819500ADE7C0 /* Camera */,
+				11B582F61F78AD91008B3BF6 /* Config */,
+				11A46BEE1F7957450089D492 /* Common */,
+				11A46BED1F7956210089D492 /* Assets */,
 			);
 			path = camera;
+			sourceTree = "<group>";
+		};
+		11775ED11F78026600371565 /* sound */ = {
+			isa = PBXGroup;
+			children = (
+				11775ED51F78065900371565 /* 馬の鳴き声.mp3 */,
+				11A46BE81F792A790089D492 /* 一眼カメラのシャッター音.mp3 */,
+				11A46BE91F792A790089D492 /* 小型カメラのシャッター音.mp3 */,
+				11A46BE71F792A790089D492 /* 連射音.mp3 */,
+			);
+			path = sound;
+			sourceTree = "<group>";
+		};
+		11A46BED1F7956210089D492 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				1155223C1F681E5D003A5531 /* Assets.xcassets */,
+				11775ED11F78026600371565 /* sound */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		11A46BEE1F7957450089D492 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				11A46BEF1F7957570089D492 /* SuperViewController.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		11B582F61F78AD91008B3BF6 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				11B582F71F78ADA6008B3BF6 /* ConfigViewController.swift */,
+			);
+			path = Config;
 			sourceTree = "<group>";
 		};
 		11B598101F7618D4000B6E45 /* Frameworks */ = {
@@ -78,12 +128,12 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		11B9DC1F1F76819500ADE7C0 /* camera */ = {
+		11B9DC1F1F76819500ADE7C0 /* Camera */ = {
 			isa = PBXGroup;
 			children = (
 				113FFF281F73FDFF00DF6957 /* CameraViewController.swift */,
 			);
-			path = camera;
+			path = Camera;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -148,7 +198,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				11A46BEA1F792A840089D492 /* 一眼カメラのシャッター音.mp3 in Resources */,
+				11775ED61F78076300371565 /* 馬の鳴き声.mp3 in Resources */,
+				11A46BEB1F792A860089D492 /* 小型カメラのシャッター音.mp3 in Resources */,
 				1155223D1F681E5D003A5531 /* Assets.xcassets in Resources */,
+				11A46BEC1F792A8A0089D492 /* 連射音.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -179,6 +233,8 @@
 			files = (
 				115522361F681E5D003A5531 /* AppDelegate.swift in Sources */,
 				113FFF291F73FDFF00DF6957 /* CameraViewController.swift in Sources */,
+				11A46BF01F7957570089D492 /* SuperViewController.swift in Sources */,
+				11B582F81F78ADA6008B3BF6 /* ConfigViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

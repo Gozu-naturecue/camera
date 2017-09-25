@@ -10,14 +10,14 @@ import UIKit
 import SnapKit
 import AVFoundation
 
-class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
+class CameraViewController: SuperViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
 
     var input:AVCaptureDeviceInput!
     var output:AVCaptureVideoDataOutput!
     var session:AVCaptureSession!
     var camera:AVCaptureDevice!
-    var willSave = false
     var currentPosition:String!
+    var willSave = false
     
     let blackView: UIView = {
         let view = UIView()
@@ -25,10 +25,10 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
         view.isHidden = true
         return view
     }()
-    let headerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .black
-        return view
+    let configButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "config"), for: .normal)
+        return button
     }()
     let cameraView: UIView = {
         let view = UIView()
@@ -72,15 +72,15 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor.black
         
         view.addSubview(cameraView)
         view.addSubview(headerView)
+            headerView.addSubview(configButton)
         view.addSubview(modeView)
         view.addSubview(footerView)
-        footerView.addSubview(shutterLabel)
-        footerView.addSubview(shutterButton)
-        footerView.addSubview(changeCameraButton)
+            footerView.addSubview(shutterLabel)
+            footerView.addSubview(shutterButton)
+            footerView.addSubview(changeCameraButton)
         
         view.addSubview(blackView)
         
@@ -93,6 +93,11 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
             make.height.equalTo(50)
             make.top.left.equalTo(0)
         })
+            configButton.snp.makeConstraints({ (make) in
+                make.width.height.equalTo(35)
+                make.centerY.equalToSuperview()
+                make.right.equalTo(-10)
+            })
         cameraView.snp.makeConstraints({ (make) in
             make.width.equalToSuperview()
             make.height.equalToSuperview()
@@ -110,37 +115,40 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
             make.left.equalTo(0)
             make.bottom.equalToSuperview()
         })
-        shutterLabel.snp.makeConstraints({ (make) in
-            make.width.height.equalTo(60)
-            make.centerX.centerY.equalToSuperview()
-        })
-        shutterButton.snp.makeConstraints({ (make) in
-            make.width.height.equalTo(48)
-            make.centerX.centerY.equalToSuperview()
-        })
-        changeCameraButton.snp.makeConstraints({ (make) in
-            make.width.height.equalTo(35)
-            make.centerY.equalToSuperview()
-            make.right.equalTo(-10)
-        })
+            shutterLabel.snp.makeConstraints({ (make) in
+                make.width.height.equalTo(60)
+                make.centerX.centerY.equalToSuperview()
+            })
+            shutterButton.snp.makeConstraints({ (make) in
+                make.width.height.equalTo(48)
+                make.centerX.centerY.equalToSuperview()
+            })
+            changeCameraButton.snp.makeConstraints({ (make) in
+                make.width.height.equalTo(35)
+                make.centerY.equalToSuperview()
+                make.right.equalTo(-10)
+            })
         // シャッターボタンの動作
         shutterButton.addTarget(self, action: #selector(CameraViewController.onDownShutterButton(sender:)), for: .touchDown)
         shutterButton.addTarget(self, action: #selector(CameraViewController.onUpShutterButton(sender:)), for: [.touchUpInside,.touchUpOutside])
 
         // カメラ切り替えボタンの動作
         changeCameraButton.addTarget(self, action: #selector(CameraViewController.onDownChangeCameraButton(sender:)), for: .touchDown)
-        changeCameraButton.addTarget(self, action: #selector(CameraViewController.onUpChangeCameraButton(sender:)), for: [.touchUpInside,.touchUpOutside])
+        
+        // コンフィグボタンの動作
+        configButton.addTarget(self, action: #selector(CameraViewController.onConfigButton(sender:)), for: .touchDown)
+        
+        setUpBackCamera()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        setUpFrontCamera()
-//        setUpBackCamera()
+        self.soundName = userDefaults.string(forKey: "シャッター音")!
     }
     
     @objc internal func onDownShutterButton(sender: UIButton) {
         UIView.animate(withDuration: 0.06,
                        animations: { () -> Void in
-                        self.shutterButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+                       self.shutterButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
         })
     }
     
@@ -149,6 +157,7 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
                        animations: { () -> Void in
                         self.shutterButton.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
                         self.blackView.isHidden = false
+                        self.playSound(soundName: self.soundName)
         }, completion: { _ in
             self.willSave = true
             self.blackView.isHidden = true
@@ -159,10 +168,15 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
         changeCamera()
     }
     
-    @objc internal func onUpChangeCameraButton(sender: UIButton) {
-        
+    @objc internal func onConfigButton(sender: UIButton) {
+        // 遷移するViewを定義する.
+        let configViewController = ConfigViewController()
+        self.navigationController?.pushViewController(configViewController, animated: true)
     }
     
+    /*
+     * カメラのセッティング
+     */
     func changeCamera() {
         if self.currentPosition == "front" {
             setUpBackCamera()
@@ -273,6 +287,5 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
         CVPixelBufferUnlockBaseAddress(imageBuffer, CVPixelBufferLockFlags(rawValue: 0))
         return image
     }
-    
 }
 
