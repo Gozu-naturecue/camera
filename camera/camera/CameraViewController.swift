@@ -19,6 +19,7 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
     var audioPlayer : AVAudioPlayer!
     var willSave = false
     var currentPosition:String!
+    let userDefaults = UserDefaults.standard
     
     let blackView: UIView = {
         let view = UIView()
@@ -145,12 +146,11 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
         // コンフィグボタンの動作
         configButton.addTarget(self, action: #selector(CameraViewController.onConfigButton(sender:)), for: .touchDown)
         
-        // シャッター音のセット
-        setSound()
+        setUpBackCamera()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        setUpBackCamera()
+        setSound()
     }
     
     @objc internal func onDownShutterButton(sender: UIButton) {
@@ -294,8 +294,12 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
     }
 
     func setSound(){
+        let soundName = userDefaults.string(forKey: "シャッター音")
+        if soundName == "デフォルト" {
+            return
+        }
         //再生する音源のURLを生成.
-        let soundFilePath : String = Bundle.main.path(forResource: "馬の鳴き声", ofType: "mp3")!
+        let soundFilePath : String = Bundle.main.path(forResource: soundName, ofType: "mp3")!
         let fileURL = URL(fileURLWithPath: soundFilePath)
         //AVAudioPlayerのインスタンス化.
         audioPlayer = try! AVAudioPlayer(contentsOf: fileURL)
@@ -304,8 +308,12 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
     }
 
     func playSound() {
-        audioPlayer.currentTime = 0
-        audioPlayer.play()
+        if userDefaults.string(forKey: "シャッター音") == "デフォルト" {
+            AudioServicesPlaySystemSound(1108)
+        } else {
+            audioPlayer.currentTime = 0
+            audioPlayer.play()
+        }
     }
     
     //音楽再生が成功した時に呼ばれるメソッド.
