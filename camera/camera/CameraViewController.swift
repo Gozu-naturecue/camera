@@ -141,7 +141,9 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
 
         // カメラ切り替えボタンの動作
         changeCameraButton.addTarget(self, action: #selector(CameraViewController.onDownChangeCameraButton(sender:)), for: .touchDown)
-        changeCameraButton.addTarget(self, action: #selector(CameraViewController.onUpChangeCameraButton(sender:)), for: [.touchUpInside,.touchUpOutside])
+        
+        // コンフィグボタンの動作
+        configButton.addTarget(self, action: #selector(CameraViewController.onConfigButton(sender:)), for: .touchDown)
         
         // シャッター音のセット
         setSound()
@@ -174,8 +176,10 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
         changeCamera()
     }
     
-    @objc internal func onUpChangeCameraButton(sender: UIButton) {
-        
+    @objc internal func onConfigButton(sender: UIButton) {
+        // 遷移するViewを定義する.
+        let configViewController = ConfigViewController()
+        self.navigationController?.pushViewController(configViewController, animated: true)
     }
     
     func changeCamera() {
