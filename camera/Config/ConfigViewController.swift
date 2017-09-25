@@ -10,11 +10,13 @@ import UIKit
 import SnapKit
 
 class ConfigViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    // Tableで使用する配列を定義する.
-    private let shutterSoundItems: NSArray = ["デフォルト","一眼カメラのシャッター音", "小型カメラのシャッター音", "連射音", "馬の鳴き声"]
+    let userDefaults = UserDefaults.standard
+    var currentConfiguration: [String] = []
     
+    // Tableで使用する配列を定義する.
+    private let shutterSoundItems: [String] = ["デフォルト","一眼カメラのシャッター音", "小型カメラのシャッター音", "連射音", "馬の鳴き声"]
     // Sectionで使用する配列を定義する.
-    private let sections: NSArray = ["シャッター音"]
+    private let sections: [String] = ["シャッター音"]
     
     let headerView: UIView = {
         let view = UIView()
@@ -83,6 +85,8 @@ class ConfigViewController: UIViewController, UITableViewDelegate, UITableViewDa
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.dataSource = self
         tableView.delegate = self
+        
+        setCurrentConfiguration()
     }
     
     @objc internal func onHomeButton(sender: UIButton) {
@@ -93,12 +97,21 @@ class ConfigViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return sections.count
     }
     
+    func setCurrentConfiguration(){
+        for section in sections {
+            if ((userDefaults.string(forKey: section)) == nil) {
+                userDefaults.set("デフォルト", forKey: section)
+            }
+            currentConfiguration.append(userDefaults.string(forKey: section )!)
+        }
+    }
+    
     // セクションのタイトル
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let label : UILabel = UILabel()
         label.backgroundColor = .black
         label.textColor = #colorLiteral(red: 0.337254902, green: 0.3333333333, blue: 0.3529411765, alpha: 1)
-        label.text = sections[section] as? String
+        label.text = sections[section]
         return label
     }
     
@@ -112,7 +125,7 @@ class ConfigViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         // 処理
         if indexPath.section == 0 {
-            print("Value: \(shutterSoundItems[indexPath.row])")
+            userDefaults.set( shutterSoundItems[indexPath.row], forKey: sections[indexPath.section])
         }
     }
     
@@ -140,6 +153,10 @@ class ConfigViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         if indexPath.section == 0 {
             cell.textLabel?.text = "\(shutterSoundItems[indexPath.row])"
+            if userDefaults.string(forKey: sections[indexPath.section]) == shutterSoundItems[indexPath.row] {
+                cell.textLabel?.textColor = #colorLiteral(red: 0.9529411765, green: 0.568627451, blue: 0.1921568627, alpha: 1)
+                tableView.selectRow(at: indexPath, animated: true, scrollPosition: UITableViewScrollPosition(rawValue: indexPath.section)!)
+            }
         }
         
         return cell
