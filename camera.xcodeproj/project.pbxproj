@@ -70,12 +70,11 @@
 		115522341F681E5D003A5531 /* camera */ = {
 			isa = PBXGroup;
 			children = (
-				11775ED11F78026600371565 /* sound */,
-				11B9DC1F1F76819500ADE7C0 /* camera */,
-				115522351F681E5D003A5531 /* AppDelegate.swift */,
-				11B582F61F78AD91008B3BF6 /* Config */,
-				1155223C1F681E5D003A5531 /* Assets.xcassets */,
 				115522411F681E5D003A5531 /* Info.plist */,
+				115522351F681E5D003A5531 /* AppDelegate.swift */,
+				11B9DC1F1F76819500ADE7C0 /* Camera */,
+				11B582F61F78AD91008B3BF6 /* Config */,
+				11A46BED1F7956210089D492 /* Assets */,
 			);
 			path = camera;
 			sourceTree = "<group>";
@@ -89,6 +88,15 @@
 				11A46BE71F792A790089D492 /* 連射音.mp3 */,
 			);
 			path = sound;
+			sourceTree = "<group>";
+		};
+		11A46BED1F7956210089D492 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				1155223C1F681E5D003A5531 /* Assets.xcassets */,
+				11775ED11F78026600371565 /* sound */,
+			);
+			path = Assets;
 			sourceTree = "<group>";
 		};
 		11B582F61F78AD91008B3BF6 /* Config */ = {
@@ -109,12 +117,12 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		11B9DC1F1F76819500ADE7C0 /* camera */ = {
+		11B9DC1F1F76819500ADE7C0 /* Camera */ = {
 			isa = PBXGroup;
 			children = (
 				113FFF281F73FDFF00DF6957 /* CameraViewController.swift */,
 			);
-			path = camera;
+			path = Camera;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
