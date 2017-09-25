@@ -31,6 +31,11 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
         view.backgroundColor = .black
         return view
     }()
+    let configButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "config"), for: .normal)
+        return button
+    }()
     let cameraView: UIView = {
         let view = UIView()
         view.backgroundColor = .red
@@ -77,11 +82,12 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
         
         view.addSubview(cameraView)
         view.addSubview(headerView)
+            headerView.addSubview(configButton)
         view.addSubview(modeView)
         view.addSubview(footerView)
-        footerView.addSubview(shutterLabel)
-        footerView.addSubview(shutterButton)
-        footerView.addSubview(changeCameraButton)
+            footerView.addSubview(shutterLabel)
+            footerView.addSubview(shutterButton)
+            footerView.addSubview(changeCameraButton)
         
         view.addSubview(blackView)
         
@@ -94,6 +100,11 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
             make.height.equalTo(50)
             make.top.left.equalTo(0)
         })
+            configButton.snp.makeConstraints({ (make) in
+                make.width.height.equalTo(35)
+                make.centerY.equalToSuperview()
+                make.right.equalTo(-10)
+            })
         cameraView.snp.makeConstraints({ (make) in
             make.width.equalToSuperview()
             make.height.equalToSuperview()
@@ -111,26 +122,28 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
             make.left.equalTo(0)
             make.bottom.equalToSuperview()
         })
-        shutterLabel.snp.makeConstraints({ (make) in
-            make.width.height.equalTo(60)
-            make.centerX.centerY.equalToSuperview()
-        })
-        shutterButton.snp.makeConstraints({ (make) in
-            make.width.height.equalTo(48)
-            make.centerX.centerY.equalToSuperview()
-        })
-        changeCameraButton.snp.makeConstraints({ (make) in
-            make.width.height.equalTo(35)
-            make.centerY.equalToSuperview()
-            make.right.equalTo(-10)
-        })
+            shutterLabel.snp.makeConstraints({ (make) in
+                make.width.height.equalTo(60)
+                make.centerX.centerY.equalToSuperview()
+            })
+            shutterButton.snp.makeConstraints({ (make) in
+                make.width.height.equalTo(48)
+                make.centerX.centerY.equalToSuperview()
+            })
+            changeCameraButton.snp.makeConstraints({ (make) in
+                make.width.height.equalTo(35)
+                make.centerY.equalToSuperview()
+                make.right.equalTo(-10)
+            })
         // シャッターボタンの動作
         shutterButton.addTarget(self, action: #selector(CameraViewController.onDownShutterButton(sender:)), for: .touchDown)
         shutterButton.addTarget(self, action: #selector(CameraViewController.onUpShutterButton(sender:)), for: [.touchUpInside,.touchUpOutside])
 
         // カメラ切り替えボタンの動作
         changeCameraButton.addTarget(self, action: #selector(CameraViewController.onDownChangeCameraButton(sender:)), for: .touchDown)
-        changeCameraButton.addTarget(self, action: #selector(CameraViewController.onUpChangeCameraButton(sender:)), for: [.touchUpInside,.touchUpOutside])
+        
+        // コンフィグボタンの動作
+        configButton.addTarget(self, action: #selector(CameraViewController.onConfigButton(sender:)), for: .touchDown)
         
         // シャッター音のセット
         setSound()
@@ -163,8 +176,10 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
         changeCamera()
     }
     
-    @objc internal func onUpChangeCameraButton(sender: UIButton) {
-        
+    @objc internal func onConfigButton(sender: UIButton) {
+        // 遷移するViewを定義する.
+        let configViewController = ConfigViewController()
+        self.navigationController?.pushViewController(configViewController, animated: true)
     }
     
     func changeCamera() {
