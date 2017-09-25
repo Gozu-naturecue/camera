@@ -11,7 +11,7 @@ import SnapKit
 
 class ConfigViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     // Tableで使用する配列を定義する.
-    private let shutterSoundItems: NSArray = ["iOS9","iOS8", "iOS7", "iOS6", "iOS5", "iOS4"]
+    private let shutterSoundItems: NSArray = ["デフォルト","一眼カメラのシャッター音", "小型カメラのシャッター音", "連射音", "馬の鳴き声"]
     
     // Sectionで使用する配列を定義する.
     private let sections: NSArray = ["シャッター音"]
