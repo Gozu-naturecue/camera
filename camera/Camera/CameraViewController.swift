@@ -152,11 +152,7 @@ class CameraViewController: SuperViewController, AVCaptureVideoDataOutputSampleB
         
         setUpBackCamera()
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        self.soundName = userDefaults.string(forKey: "シャッター音")!
-    }
-    
+
     @objc internal func onDownShutterButton(sender: UIButton) {
         UIView.animate(withDuration: 0.06,
                        animations: { () -> Void in
