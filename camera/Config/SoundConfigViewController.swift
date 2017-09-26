@@ -1,8 +1,8 @@
 //
-//  ConfigViewController.swift
+//  SoundConfigViewController.swift
 //  camera
 //
-//  Created by nature-cue on 2017/09/25.
+//  Created by nature-cue on 2017/09/27.
 //  Copyright © 2017年 nature-cue. All rights reserved.
 //
 
@@ -10,14 +10,15 @@ import UIKit
 import SnapKit
 import AVFoundation
 
-class ConfigViewController: SuperViewController, UITableViewDelegate, UITableViewDataSource {
+class SoundConfigViewController: SuperViewController, UITableViewDelegate, UITableViewDataSource {
+    var currentConfiguration: [String] = []
     
-    // Tableで使用する配列を設定する
-    private let items: NSArray = ["シャッター音", "シャッター画面"]
+    // Tableで使用する配列を定義する.
+    private let items: NSArray = ["デフォルト","一眼カメラのシャッター音", "小型カメラのシャッター音", "連射音", "馬の鳴き声"]
     
-    let homeButton: UIButton = {
+    let configButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "camera"), for: .normal)
+        button.setImage(UIImage(named: "config"), for: .normal)
         return button
     }()
     let borderUnderHeader: CALayer = {
@@ -29,7 +30,7 @@ class ConfigViewController: SuperViewController, UITableViewDelegate, UITableVie
     let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor.white
-        label.text = "設定"
+        label.text = "シャッター音"
         label.textAlignment = NSTextAlignment.center
         return label
     }()
@@ -47,7 +48,7 @@ class ConfigViewController: SuperViewController, UITableViewDelegate, UITableVie
         view.addSubview(tableView)
         view.addSubview(headerView)
         headerView.addSubview(titleLabel)
-        headerView.addSubview(homeButton)
+        headerView.addSubview(configButton)
         headerView.layer.addSublayer(borderUnderHeader)
         
         
@@ -59,7 +60,7 @@ class ConfigViewController: SuperViewController, UITableViewDelegate, UITableVie
         titleLabel.snp.makeConstraints({ (make) in
             make.width.height.equalToSuperview()
         })
-        homeButton.snp.makeConstraints({ (make) in
+        configButton.snp.makeConstraints({ (make) in
             make.width.height.equalTo(40)
             make.centerY.equalToSuperview()
             make.left.equalTo(10)
@@ -79,19 +80,35 @@ class ConfigViewController: SuperViewController, UITableViewDelegate, UITableVie
         
         // Delegateを自身に設定する.
         tableView.delegate = self
-        
     }
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
+    @objc internal func onHomeButton(sender: UIButton) {
+        navigationController?.popViewController(animated: true)
+    }
+    
     /*
-     Cellが選択された際に呼び出される
+     Cellが選択された際に呼び出される.
      */
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Num: \(indexPath.row)")
-        print("Value: \(items[indexPath.row])")
+        // チェックマークをつける
+        let cell = tableView.cellForRow(at:indexPath)
+        cell?.textLabel?.textColor = #colorLiteral(red: 0.9529411765, green: 0.568627451, blue: 0.1921568627, alpha: 1)
+        
+        // 処理
+        // シャッター音
+        self.soundName = String("\(items[indexPath.row])")
+        userDefaults.set( self.soundName, forKey: "シャッター音")
+        playSound(soundName: self.soundName)
+    }
+    
+    // セルの選択が外れた時に呼び出される
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at:indexPath)
+        cell?.textLabel?.textColor = UIColor.white
     }
     
     /*
@@ -101,9 +118,7 @@ class ConfigViewController: SuperViewController, UITableViewDelegate, UITableVie
         return items.count
     }
     
-    /*
-     Cellに値を設定する
-     */
+    // リストのアイテム
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // 再利用するCellを取得する.
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
@@ -117,5 +132,4 @@ class ConfigViewController: SuperViewController, UITableViewDelegate, UITableVie
         
         return cell
     }
-    
 }

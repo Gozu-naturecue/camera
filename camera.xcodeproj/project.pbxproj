@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		113FFF291F73FDFF00DF6957 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113FFF281F73FDFF00DF6957 /* CameraViewController.swift */; };
 		1140F8B51F7698B0005E8F4C /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B9DC171F767E4C00ADE7C0 /* SnapKit.framework */; };
+		114307D91F7AC75A00287F4C /* SoundConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114307D81F7AC75A00287F4C /* SoundConfigViewController.swift */; };
+		114307DB1F7ACA6800287F4C /* ShutterConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114307DA1F7ACA6800287F4C /* ShutterConfigViewController.swift */; };
 		115522361F681E5D003A5531 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115522351F681E5D003A5531 /* AppDelegate.swift */; };
 		1155223D1F681E5D003A5531 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1155223C1F681E5D003A5531 /* Assets.xcassets */; };
 		11775ED61F78076300371565 /* 馬の鳴き声.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 11775ED51F78065900371565 /* 馬の鳴き声.mp3 */; };
@@ -23,6 +25,8 @@
 
 /* Begin PBXFileReference section */
 		113FFF281F73FDFF00DF6957 /* CameraViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
+		114307D81F7AC75A00287F4C /* SoundConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundConfigViewController.swift; sourceTree = "<group>"; };
+		114307DA1F7ACA6800287F4C /* ShutterConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShutterConfigViewController.swift; sourceTree = "<group>"; };
 		115522321F681E5D003A5531 /* camera.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = camera.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		115522351F681E5D003A5531 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1155223C1F681E5D003A5531 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -114,6 +118,8 @@
 			isa = PBXGroup;
 			children = (
 				11B582F71F78ADA6008B3BF6 /* ConfigViewController.swift */,
+				114307D81F7AC75A00287F4C /* SoundConfigViewController.swift */,
+				114307DA1F7ACA6800287F4C /* ShutterConfigViewController.swift */,
 			);
 			path = Config;
 			sourceTree = "<group>";
@@ -231,10 +237,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				114307DB1F7ACA6800287F4C /* ShutterConfigViewController.swift in Sources */,
 				115522361F681E5D003A5531 /* AppDelegate.swift in Sources */,
 				113FFF291F73FDFF00DF6957 /* CameraViewController.swift in Sources */,
 				11A46BF01F7957570089D492 /* SuperViewController.swift in Sources */,
 				11B582F81F78ADA6008B3BF6 /* ConfigViewController.swift in Sources */,
+				114307D91F7AC75A00287F4C /* SoundConfigViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
