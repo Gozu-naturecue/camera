@@ -15,10 +15,11 @@ class ConfigViewController: SuperViewController, UITableViewDelegate, UITableVie
     
     // Tableで使用する配列を定義する.
     private let shutterSoundItems: [String] = ["デフォルト","一眼カメラのシャッター音", "小型カメラのシャッター音", "連射音", "馬の鳴き声"]
+    private let shutterImageItems: [String] = ["黒画面","白画面", "画像を設定"]
     // Sectionで使用する配列を定義する.
-    private let sections: [String] = ["シャッター音"]
+    private let sections: [String] = ["シャッター音", "シャッター画面"]
     
-
+    
     let homeButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "camera"), for: .normal)
@@ -136,6 +137,8 @@ class ConfigViewController: SuperViewController, UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             return shutterSoundItems.count
+        } else if section == 1 {
+            return shutterImageItems.count
         } else {
             return 0
         }
@@ -155,8 +158,17 @@ class ConfigViewController: SuperViewController, UITableViewDelegate, UITableVie
                 cell.textLabel?.textColor = #colorLiteral(red: 0.9529411765, green: 0.568627451, blue: 0.1921568627, alpha: 1)
                 tableView.selectRow(at: indexPath, animated: true, scrollPosition: UITableViewScrollPosition(rawValue: indexPath.section)!)
             }
+        } else if indexPath.section == 1 {
+            cell.textLabel?.text = "\(shutterImageItems[indexPath.row])"
+            /*
+             if userDefaults.string(forKey: sections[indexPath.section]) == shutterSoundItems[indexPath.row] {
+             cell.textLabel?.textColor = #colorLiteral(red: 0.9529411765, green: 0.568627451, blue: 0.1921568627, alpha: 1)
+             tableView.selectRow(at: indexPath, animated: true, scrollPosition: UITableViewScrollPosition(rawValue: indexPath.section)!)
+             }
+             */
         }
         
         return cell
     }
 }
+
