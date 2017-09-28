@@ -92,6 +92,14 @@ class ConfigViewController: SuperViewController, UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("Num: \(indexPath.row)")
         print("Value: \(items[indexPath.row])")
+
+        let nextViewController: SuperViewController;
+        if indexPath.row == 0 {
+            nextViewController = SoundConfigViewController()
+        } else {
+            nextViewController = ShutterConfigViewController()
+        }
+        self.navigationController?.pushViewController(nextViewController, animated: true)
     }
     
     /*
