@@ -80,19 +80,21 @@ class ConfigViewController: SuperViewController, UITableViewDelegate, UITableVie
         // Delegateを自身に設定する.
         tableView.delegate = self
         
+        homeButton.addTarget(self, action: #selector(ConfigViewController.onHomeButton(sender:)), for: .touchDown)
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
+    @objc internal func onHomeButton(sender: UIButton) {
+        navigationController?.popViewController(animated: true)
+    }
+    
     /*
      Cellが選択された際に呼び出される
      */
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Num: \(indexPath.row)")
-        print("Value: \(items[indexPath.row])")
-
         let nextViewController: SuperViewController;
         if indexPath.row == 0 {
             nextViewController = SoundConfigViewController()

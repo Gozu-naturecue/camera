@@ -16,7 +16,7 @@ class ShutterConfigViewController: SuperViewController, UITableViewDelegate, UIT
     // Tableで使用する配列を定義する.
     private let items: NSArray = ["黒画面","白画面", "ライブラリから選ぶ"]
     
-    let configButton: UIButton = {
+    let backButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "config"), for: .normal)
         return button
@@ -48,7 +48,7 @@ class ShutterConfigViewController: SuperViewController, UITableViewDelegate, UIT
         view.addSubview(tableView)
         view.addSubview(headerView)
         headerView.addSubview(titleLabel)
-        headerView.addSubview(configButton)
+        headerView.addSubview(backButton)
         headerView.layer.addSublayer(borderUnderHeader)
         
         
@@ -60,7 +60,7 @@ class ShutterConfigViewController: SuperViewController, UITableViewDelegate, UIT
         titleLabel.snp.makeConstraints({ (make) in
             make.width.height.equalToSuperview()
         })
-        configButton.snp.makeConstraints({ (make) in
+        backButton.snp.makeConstraints({ (make) in
             make.width.height.equalTo(40)
             make.centerY.equalToSuperview()
             make.left.equalTo(10)
@@ -80,13 +80,15 @@ class ShutterConfigViewController: SuperViewController, UITableViewDelegate, UIT
         
         // Delegateを自身に設定する.
         tableView.delegate = self
+        
+        backButton.addTarget(self, action: #selector(ShutterConfigViewController.onBackButton(sender:)), for: .touchDown)
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
-    @objc internal func onHomeButton(sender: UIButton) {
+    @objc internal func onBackButton(sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
     
