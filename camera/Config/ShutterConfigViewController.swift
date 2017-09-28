@@ -105,6 +105,11 @@ class ShutterConfigViewController: SuperViewController, UITableViewDelegate, UIT
         // シャッター画面
         self.shutterImageName = String("\(items[indexPath.row])")
         userDefaults.set( self.shutterImageName, forKey: "シャッター画面")
+
+        if items[indexPath.row] == "ライブラリから選ぶ" {
+            let nextViewController = SelectImageViewController()
+            self.navigationController?.pushViewController(nextViewController, animated: true)
+        }
     }
     
     // セルの選択が外れた時に呼び出される
