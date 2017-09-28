@@ -14,7 +14,10 @@ class SoundConfigViewController: SuperViewController, UITableViewDelegate, UITab
     var currentConfiguration: [String] = []
     
     // Tableで使用する配列を定義する.
-    private let items: NSArray = ["デフォルト","一眼カメラのシャッター音", "小型カメラのシャッター音", "連射音", "馬の鳴き声"]
+    private let items: [String] = ["デフォルト", "一眼カメラのシャッター音", "小型カメラのシャッター音", "連射音", "馬の鳴き声"]
+    
+    let congigTitle: String = "シャッター音"
+    
     
     let backButton: UIButton = {
         let button = UIButton()
@@ -131,7 +134,12 @@ class SoundConfigViewController: SuperViewController, UITableViewDelegate, UITab
         
         // Cellに値を設定する.
         cell.textLabel!.text = "\(items[indexPath.row])"
-        
+
+        if userDefaults.string(forKey: congigTitle) == items[indexPath.row] {
+            cell.textLabel?.textColor = #colorLiteral(red: 0.9529411765, green: 0.568627451, blue: 0.1921568627, alpha: 1)
+            tableView.selectRow(at: indexPath, animated: true, scrollPosition: UITableViewScrollPosition(rawValue: indexPath.section)!)
+        }
+
         return cell
     }
 }

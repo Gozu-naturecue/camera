@@ -14,7 +14,8 @@ class ShutterConfigViewController: SuperViewController, UITableViewDelegate, UIT
     var currentConfiguration: [String] = []
     
     // Tableで使用する配列を定義する.
-    private let items: NSArray = ["黒画面","白画面", "ライブラリから選ぶ"]
+    private let items: [String] = ["黒画面","白画面", "ライブラリから選ぶ"]
+    let congigTitle: String = "シャッター画面"
     
     let backButton: UIButton = {
         let button = UIButton()
@@ -101,8 +102,8 @@ class ShutterConfigViewController: SuperViewController, UITableViewDelegate, UIT
         cell?.textLabel?.textColor = #colorLiteral(red: 0.9529411765, green: 0.568627451, blue: 0.1921568627, alpha: 1)
         
         // 処理
-        // シャッター音
-        self.soundName = String("\(items[indexPath.row])")
+        // シャッター画面
+        self.shutterImageName = String("\(items[indexPath.row])")
         userDefaults.set( self.shutterImageName, forKey: "シャッター画面")
     }
     
@@ -130,6 +131,11 @@ class ShutterConfigViewController: SuperViewController, UITableViewDelegate, UIT
         
         // Cellに値を設定する.
         cell.textLabel!.text = "\(items[indexPath.row])"
+        
+        if userDefaults.string(forKey: congigTitle) == items[indexPath.row] {
+            cell.textLabel?.textColor = #colorLiteral(red: 0.9529411765, green: 0.568627451, blue: 0.1921568627, alpha: 1)
+            tableView.selectRow(at: indexPath, animated: true, scrollPosition: UITableViewScrollPosition(rawValue: indexPath.section)!)
+        }
         
         return cell
     }
