@@ -63,6 +63,7 @@ class SelectImageViewController: SuperViewController, UINavigationControllerDele
         
         // モーダルビューを閉じる
         self.dismiss(animated: true, completion: nil)
+        navigationController?.popToViewController(navigationController!.viewControllers[2], animated: true)
     }
     
 }
