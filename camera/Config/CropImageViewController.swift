@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 
 class CropImageViewController: SuperViewController {
+    var image: UIImage!
 
     let imageView: UIImageView = {
        let imageView = UIImageView()

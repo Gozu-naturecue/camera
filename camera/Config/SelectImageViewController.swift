@@ -41,9 +41,9 @@ class SelectImageViewController: SuperViewController, UIImagePickerControllerDel
         let image: AnyObject? = info[UIImagePickerControllerOriginalImage] as AnyObject
 
         /*
-        let editViewController = EditViewController()
-        editViewController.selectedImage = image as! UIImage
-        imagePicker.pushViewController(editViewController, animated: true)
+        let cropImageViewController = CropImageViewController()
+        cropImageViewController.image = image as! UIImage
+        imagePicker.pushViewController(cropImageViewController, animated: true)
          */
     }
 
