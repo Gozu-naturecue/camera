@@ -88,20 +88,7 @@ class CropImageViewController: SuperViewController, UIScrollViewDelegate {
         self.doneButton.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.3042594178)
     }
 
-    func viewForZooming(in scrollView: UIScrollView) -> UIView? {        return self.imageView
-    }
-    
-    func zoomRectForScale(scale:CGFloat, center: CGPoint) -> CGRect{
-        let size = CGSize(
-            width: self.scrollView.frame.size.width / scale,
-            height: self.scrollView.frame.size.height / scale
-        )
-        return CGRect(
-            origin: CGPoint(
-                x: center.x - size.width / 2.0,
-                y: center.y - size.height / 2.0
-            ),
-            size: size
-        )
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return self.imageView
     }
 }
