@@ -9,44 +9,53 @@
 import UIKit
 import SnapKit
 
-class SelectImageViewController: SuperViewController, UIImagePickerControllerDelegate {
+class SelectImageViewController: SuperViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
     var imagePicker: UIImagePickerController!
     var imageView: UIImageView!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "画像を選択"
+        self.title = "Select a Image"
         
         imageView = UIImageView(frame: self.view.bounds)
+        
+        // インスタンス生成
         imagePicker = UIImagePickerController()
-        imagePicker.delegate = self as? UIImagePickerControllerDelegate & UINavigationControllerDelegate
+        
+        // デリゲート設定
+        imagePicker.delegate = self
+        
+        // 画像の取得先はフォトライブラリ
         imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
-        imagePicker.allowsEditing = true
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
+        
+        // 画像取得後の編集を不可に
+        imagePicker.allowsEditing = false
     }
     
     override func viewDidAppear(_ animated: Bool) {
         self.present(imagePicker, animated: true, completion: nil)
+        
     }
-
+    
     /**
      画像が選択された時に呼ばれる.
      */
-    @objc(imagePickerController:didFinishPickingMediaWithInfo:) func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        let image: AnyObject? = info[UIImagePickerControllerOriginalImage] as AnyObject
-
-        /*
-        let editViewController = EditViewController()
-        editViewController.selectedImage = image as! UIImage
-        imagePicker.pushViewController(editViewController, animated: true)
-         */
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        
+        //選択された画像を取得.
+        let image: AnyObject?  = info[UIImagePickerControllerOriginalImage]
+        //選択された画像を表示するViewControllerを生成.
+        let cropImageViewController = CropImageViewController()
+        
+        //選択された画像を表示するViewContorllerにセットする.
+        cropImageViewController.image = image as! UIImage
+        
+        imagePicker.pushViewController(cropImageViewController, animated: true)
+        
     }
-
+    
     /**
      画像選択がキャンセルされた時に呼ばれる.
      */
