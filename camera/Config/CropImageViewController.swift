@@ -9,6 +9,50 @@
 import Foundation
 import UIKit
 
+extension UIView {
+    
+    func GetImage() -> UIImage{
+        
+        // キャプチャする範囲を取得.
+        let rect = self.bounds
+        
+        // ビットマップ画像のcontextを作成.
+        UIGraphicsBeginImageContextWithOptions(rect.size, false, 0.0)
+        let context: CGContext = UIGraphicsGetCurrentContext()!
+        
+        // 対象のview内の描画をcontextに複写する.
+        self.layer.render(in: context)
+        
+        // 現在のcontextのビットマップをUIImageとして取得.
+        let capturedImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        
+        // contextを閉じる.
+        UIGraphicsEndImageContext()
+        
+        return capturedImage
+    }
+}
+
+extension UIImage {
+    func cropping(to: CGRect) -> UIImage? {
+        var opaque = false
+        if let cgImage = cgImage {
+            switch cgImage.alphaInfo {
+            case .noneSkipLast, .noneSkipFirst:
+                opaque = true
+            default:
+                break
+            }
+        }
+        
+        UIGraphicsBeginImageContextWithOptions(to.size, opaque, scale)
+        draw(at: CGPoint(x: -to.origin.x, y: -to.origin.y))
+        let result = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return result
+    }
+}
+
 class CropImageViewController: SuperViewController, UIScrollViewDelegate {
     var image: UIImage!
 
@@ -63,6 +107,10 @@ class CropImageViewController: SuperViewController, UIScrollViewDelegate {
         
         self.scrollView.delegate = self
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.setNavigationBarHidden(true, animated: false)
+    }
 
     /**
      選択された画像をUIImageViewにセットする.
@@ -86,6 +134,13 @@ class CropImageViewController: SuperViewController, UIScrollViewDelegate {
 
     @objc internal func onUpDoneButton(sender: UIButton) {
         self.doneButton.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.3042594178)
+        
+        let capturedImage = imageView.GetImage() as UIImage
+        // 相対位置を取得
+        let rect = self.view.convert(scrollView.frame, to: imageView)
+        let croppedImage = capturedImage.cropping(to: rect )
+        
+        UIImageWriteToSavedPhotosAlbum(croppedImage!, self, nil, nil)
     }
 
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
