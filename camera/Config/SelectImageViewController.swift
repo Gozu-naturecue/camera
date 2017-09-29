@@ -23,7 +23,7 @@ class SelectImageViewController: SuperViewController, UIImagePickerControllerDel
         imagePicker = UIImagePickerController()
         imagePicker.delegate = self as? UIImagePickerControllerDelegate & UINavigationControllerDelegate
         imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
-        imagePicker.allowsEditing = true
+        imagePicker.allowsEditing = false
     }
 
     override func didReceiveMemoryWarning() {

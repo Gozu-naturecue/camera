@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        let firstViewController: CameraViewController = CameraViewController()
+        let firstViewController: SelectImageViewController = SelectImageViewController()
         
         navigationController = UINavigationController(rootViewController: firstViewController)
         navigationController?.isNavigationBarHidden = true

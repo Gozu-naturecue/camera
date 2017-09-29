@@ -6,9 +6,10 @@
 //  Copyright © 2017年 nature-cue. All rights reserved.
 //
 
+import Foundation
 import UIKit
 
-class CropImageViewController: UIViewController {
+class CropImageViewController: SuperViewController {
 
     let imageView: UIImageView = {
        let imageView = UIImageView()
