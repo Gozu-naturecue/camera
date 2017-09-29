@@ -46,9 +46,8 @@ class SelectImageViewController: SuperViewController, UINavigationControllerDele
         
         //選択された画像を取得.
         let image: AnyObject?  = info[UIImagePickerControllerOriginalImage]
-        dump(image)
         //選択された画像を表示するViewControllerを生成.
-        var cropImageViewController = CropImageViewController()
+        let cropImageViewController = CropImageViewController()
         
         //選択された画像を表示するViewContorllerにセットする.
         cropImageViewController.image = image as! UIImage

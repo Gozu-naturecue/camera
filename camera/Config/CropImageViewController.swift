@@ -9,9 +9,15 @@
 import Foundation
 import UIKit
 
-class CropImageViewController: SuperViewController {
+class CropImageViewController: SuperViewController, UIScrollViewDelegate {
     var image: UIImage!
 
+    let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.maximumZoomScale = 4.0
+        scrollView.minimumZoomScale = 1.0
+        return scrollView
+    }()
     var imageView: UIImageView = {
        let imageView = UIImageView()
         imageView.backgroundColor = .red
@@ -30,8 +36,14 @@ class CropImageViewController: SuperViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setImage()
+        view.addSubview(scrollView)
+            // scrollViewにimageViewをaddSubview
+            setImage()
         view.addSubview(doneButton)
+        
+        scrollView.snp.makeConstraints({ (make) in
+            make.width.height.top.left.equalToSuperview()
+        })
         
         imageView.snp.makeConstraints({ (make) in
             make.width.height.equalToSuperview()
@@ -48,6 +60,8 @@ class CropImageViewController: SuperViewController {
         doneButton.addTarget(self, action: #selector(CropImageViewController.onUpDoneButton(sender:)), for: [.touchUpInside,.touchUpOutside])
         
         self.edgesForExtendedLayout = []
+        
+        self.scrollView.delegate = self
     }
 
     /**
@@ -59,7 +73,7 @@ class CropImageViewController: SuperViewController {
         imageView = UIImageView(frame: self.view.bounds)
         imageView.contentMode = UIViewContentMode.scaleAspectFit
         imageView.image = image
-        self.view.addSubview(imageView)
+        self.scrollView.addSubview(imageView)
     }
     
     override func didReceiveMemoryWarning() {
@@ -72,5 +86,22 @@ class CropImageViewController: SuperViewController {
 
     @objc internal func onUpDoneButton(sender: UIButton) {
         self.doneButton.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.3042594178)
+    }
+
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {        return self.imageView
+    }
+    
+    func zoomRectForScale(scale:CGFloat, center: CGPoint) -> CGRect{
+        let size = CGSize(
+            width: self.scrollView.frame.size.width / scale,
+            height: self.scrollView.frame.size.height / scale
+        )
+        return CGRect(
+            origin: CGPoint(
+                x: center.x - size.width / 2.0,
+                y: center.y - size.height / 2.0
+            ),
+            size: size
+        )
     }
 }
