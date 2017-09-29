@@ -140,7 +140,7 @@ class CropImageViewController: SuperViewController, UIScrollViewDelegate {
         let rect = self.view.convert(scrollView.frame, to: imageView)
         let croppedImage = capturedImage.cropping(to: rect )
         
-        UIImageWriteToSavedPhotosAlbum(croppedImage!, self, nil, nil)
+        userDefaults.set(UIImagePNGRepresentation(croppedImage!)! as NSData, forKey: "imageData")
     }
 
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
