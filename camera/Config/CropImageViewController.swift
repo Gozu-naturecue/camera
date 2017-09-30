@@ -169,7 +169,8 @@ class CropImageViewController: SuperViewController, UIScrollViewDelegate {
         let croppedImage = capturedImage.cropping(to: rect )
         
         userDefaults.set(UIImagePNGRepresentation(croppedImage!)! as NSData, forKey: "imageData")
-        navigationController?.popToViewController(navigationController!.viewControllers[2], animated: true)
+        navigationController?.popToViewController(navigationController!.viewControllers[0], animated: true)
+        notificationCenter.post(name: .closeSelectImageViewController, object: nil)
     }
 
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
