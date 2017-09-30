@@ -15,6 +15,8 @@ class SuperViewController: UIViewController, AVAudioPlayerDelegate {
     var audioPlayer : AVAudioPlayer!
     var soundName: String = ""
     var shutterImageName: String = ""
+    
+    let notificationCenter = NotificationCenter.default
 
     let headerView: UIView = {
         let view = UIView()

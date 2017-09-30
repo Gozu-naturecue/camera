@@ -19,16 +19,8 @@ class CameraViewController: SuperViewController, AVCaptureVideoDataOutputSampleB
     var currentPosition:String!
     var willSave = false
     
-    let blackView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .black
-        view.isHidden = true
-        return view
-    }()
-    let shutterView: UIImageView = {
+    var shutterImageView: UIImageView = {
         let view = UIImageView()
-        let image: UIImage = UIImage(named: "Donald.jpg")!
-        view.image = image
         view.isHidden = true
         return view
     }()
@@ -89,14 +81,9 @@ class CameraViewController: SuperViewController, AVCaptureVideoDataOutputSampleB
             footerView.addSubview(shutterButton)
             footerView.addSubview(changeCameraButton)
         
-        view.addSubview(shutterView)
-        view.addSubview(blackView)
-        
-        blackView.snp.makeConstraints({ (make) in
-            make.width.height.equalToSuperview()
-            make.top.left.equalTo(0)
-        })
-        shutterView.snp.makeConstraints({ (make) in
+        view.addSubview(shutterImageView)
+
+        shutterImageView.snp.makeConstraints({ (make) in
             make.width.height.equalToSuperview()
             make.top.left.equalTo(0)
         })
@@ -164,11 +151,12 @@ class CameraViewController: SuperViewController, AVCaptureVideoDataOutputSampleB
         UIView.animate(withDuration: 0.10,
                        animations: { () -> Void in
                         self.shutterButton.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-                        self.shutterView.isHidden = false
+                        self.shutterImageView.isHidden = false
                         self.playSound(soundName: self.soundName)
+                        self.setShutterImage()
         }, completion: { _ in
             self.willSave = true
-            self.shutterView.isHidden = true
+            self.shutterImageView.isHidden = true
         })
     }
 
@@ -258,6 +246,19 @@ class CameraViewController: SuperViewController, AVCaptureVideoDataOutputSampleB
         let device = position.setDevice()
         setupCamera(device: device)
         self.currentPosition = "front"
+    }
+    
+    func setShutterImage(){
+        self.shutterImageView.image = nil
+        shutterImageName = userDefaults.string(forKey: "シャッター画面")! as String
+        if shutterImageName == "黒画面" {
+            self.shutterImageView.backgroundColor = .black
+        } else if shutterImageName == "白画面" {
+            self.shutterImageView.backgroundColor = .white
+        } else {
+            let imageData = userDefaults.data(forKey: "imageData")!
+            shutterImageView.image = UIImage(data: imageData)
+        }
     }
     
     // 1/30秒ごとに呼ばれるデリゲート(キャプチャごと)

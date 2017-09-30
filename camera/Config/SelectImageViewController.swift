@@ -32,6 +32,8 @@ class SelectImageViewController: SuperViewController, UINavigationControllerDele
         
         // 画像取得後の編集を不可に
         imagePicker.allowsEditing = false
+        
+        notificationCenter.addObserver(self, selector: #selector(catchNotification(notification:)), name: .closeSelectImageViewController, object: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -39,6 +41,11 @@ class SelectImageViewController: SuperViewController, UINavigationControllerDele
         
     }
     
+    @objc func catchNotification(notification: Notification) -> Void {
+        self.dismiss(animated: true, completion: nil)
+        navigationController?.popToViewController(navigationController!.viewControllers[2], animated: true)
+    }
+
     /**
      画像が選択された時に呼ばれる.
      */
@@ -63,6 +70,7 @@ class SelectImageViewController: SuperViewController, UINavigationControllerDele
         
         // モーダルビューを閉じる
         self.dismiss(animated: true, completion: nil)
+        navigationController?.popToViewController(navigationController!.viewControllers[2], animated: true)
     }
     
 }
