@@ -9,9 +9,14 @@
 /* Begin PBXBuildFile section */
 		113FFF291F73FDFF00DF6957 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113FFF281F73FDFF00DF6957 /* CameraViewController.swift */; };
 		1140F8B51F7698B0005E8F4C /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B9DC171F767E4C00ADE7C0 /* SnapKit.framework */; };
+		114307D91F7AC75A00287F4C /* SoundConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114307D81F7AC75A00287F4C /* SoundConfigViewController.swift */; };
+		114307DB1F7ACA6800287F4C /* ShutterConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114307DA1F7ACA6800287F4C /* ShutterConfigViewController.swift */; };
 		115522361F681E5D003A5531 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115522351F681E5D003A5531 /* AppDelegate.swift */; };
 		1155223D1F681E5D003A5531 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1155223C1F681E5D003A5531 /* Assets.xcassets */; };
+		11626B8C1F7D266500A815E0 /* SelectImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11626B8B1F7D266500A815E0 /* SelectImageViewController.swift */; };
+		11626B8E1F7DC68E00A815E0 /* CropImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11626B8D1F7DC68E00A815E0 /* CropImageViewController.swift */; };
 		11775ED61F78076300371565 /* 馬の鳴き声.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 11775ED51F78065900371565 /* 馬の鳴き声.mp3 */; };
+		11935AA11F7FE5BC00D4FA77 /* ExtensionNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11935AA01F7FE5BC00D4FA77 /* ExtensionNotification.swift */; };
 		11A46BEA1F792A840089D492 /* 一眼カメラのシャッター音.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 11A46BE81F792A790089D492 /* 一眼カメラのシャッター音.mp3 */; };
 		11A46BEB1F792A860089D492 /* 小型カメラのシャッター音.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 11A46BE91F792A790089D492 /* 小型カメラのシャッター音.mp3 */; };
 		11A46BEC1F792A8A0089D492 /* 連射音.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 11A46BE71F792A790089D492 /* 連射音.mp3 */; };
@@ -23,11 +28,16 @@
 
 /* Begin PBXFileReference section */
 		113FFF281F73FDFF00DF6957 /* CameraViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
+		114307D81F7AC75A00287F4C /* SoundConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundConfigViewController.swift; sourceTree = "<group>"; };
+		114307DA1F7ACA6800287F4C /* ShutterConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShutterConfigViewController.swift; sourceTree = "<group>"; };
 		115522321F681E5D003A5531 /* camera.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = camera.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		115522351F681E5D003A5531 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1155223C1F681E5D003A5531 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		115522411F681E5D003A5531 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		11626B8B1F7D266500A815E0 /* SelectImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectImageViewController.swift; sourceTree = "<group>"; };
+		11626B8D1F7DC68E00A815E0 /* CropImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropImageViewController.swift; sourceTree = "<group>"; };
 		11775ED51F78065900371565 /* 馬の鳴き声.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "馬の鳴き声.mp3"; sourceTree = "<group>"; };
+		11935AA01F7FE5BC00D4FA77 /* ExtensionNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionNotification.swift; sourceTree = "<group>"; };
 		11A46BE71F792A790089D492 /* 連射音.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "連射音.mp3"; sourceTree = "<group>"; };
 		11A46BE81F792A790089D492 /* 一眼カメラのシャッター音.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "一眼カメラのシャッター音.mp3"; sourceTree = "<group>"; };
 		11A46BE91F792A790089D492 /* 小型カメラのシャッター音.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "小型カメラのシャッター音.mp3"; sourceTree = "<group>"; };
@@ -106,6 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				11A46BEF1F7957570089D492 /* SuperViewController.swift */,
+				11935AA01F7FE5BC00D4FA77 /* ExtensionNotification.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -114,6 +125,10 @@
 			isa = PBXGroup;
 			children = (
 				11B582F71F78ADA6008B3BF6 /* ConfigViewController.swift */,
+				114307D81F7AC75A00287F4C /* SoundConfigViewController.swift */,
+				114307DA1F7ACA6800287F4C /* ShutterConfigViewController.swift */,
+				11626B8B1F7D266500A815E0 /* SelectImageViewController.swift */,
+				11626B8D1F7DC68E00A815E0 /* CropImageViewController.swift */,
 			);
 			path = Config;
 			sourceTree = "<group>";
@@ -231,10 +246,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				114307DB1F7ACA6800287F4C /* ShutterConfigViewController.swift in Sources */,
 				115522361F681E5D003A5531 /* AppDelegate.swift in Sources */,
+				11935AA11F7FE5BC00D4FA77 /* ExtensionNotification.swift in Sources */,
 				113FFF291F73FDFF00DF6957 /* CameraViewController.swift in Sources */,
+				11626B8C1F7D266500A815E0 /* SelectImageViewController.swift in Sources */,
 				11A46BF01F7957570089D492 /* SuperViewController.swift in Sources */,
 				11B582F81F78ADA6008B3BF6 /* ConfigViewController.swift in Sources */,
+				11626B8E1F7DC68E00A815E0 /* CropImageViewController.swift in Sources */,
+				114307D91F7AC75A00287F4C /* SoundConfigViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

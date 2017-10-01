@@ -14,6 +14,9 @@ class SuperViewController: UIViewController, AVAudioPlayerDelegate {
     let userDefaults = UserDefaults.standard
     var audioPlayer : AVAudioPlayer!
     var soundName: String = ""
+    var shutterImageName: String = ""
+    
+    let notificationCenter = NotificationCenter.default
 
     let headerView: UIView = {
         let view = UIView()
@@ -25,7 +28,13 @@ class SuperViewController: UIViewController, AVAudioPlayerDelegate {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.black
         
-        setDefault(key: "デフォルト", value: "シャッター音")
+        self.setDefault(key: "シャッター音", value: "デフォルト")
+        self.setDefault(key: "シャッター画面", value: "黒画面")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.soundName = userDefaults.string(forKey: "シャッター音")!
+        self.shutterImageName = userDefaults.string(forKey: "シャッター画面")!
     }
     
     /*
@@ -66,8 +75,8 @@ class SuperViewController: UIViewController, AVAudioPlayerDelegate {
      */
     // デフォルト値のセット
     func setDefault(key: String, value: String){
-        if ((userDefaults.string(forKey: key)) == nil) {
-            userDefaults.set(value, forKey: key)
+        if ((self.userDefaults.string(forKey: key)) == nil) {
+            self.userDefaults.set(value, forKey: key)
         }
     }
 
